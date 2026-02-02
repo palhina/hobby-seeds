@@ -10,6 +10,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import * as Haptics from 'expo-haptics';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HobbyCard } from '@/components/features/hobby/HobbyCard';
 import { filterHobbiesByDiagnosis, selectRandomHobbies } from '@/utils/filter-hobbies';
@@ -21,7 +22,7 @@ import type { DiagnosisAnswer, YuruHobby } from '@/types';
 // Styled Components
 // ===================
 
-const SContainer = styled.SafeAreaView`
+const SContainer = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
 `;
@@ -120,6 +121,7 @@ const HOBBIES_PER_PAGE = 4;
 
 export default function ResultsScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { answers: answersJson } = useLocalSearchParams<{ answers: string }>();
 
   // 回答データをパース
@@ -189,7 +191,7 @@ export default function ResultsScreen() {
   // 空状態
   if (!answers || filteredHobbies.length === 0) {
     return (
-      <SContainer>
+      <SContainer style={{ paddingTop: insets.top + 16 }}>
         <SHeader>
           <SHeaderText>🌱 今日のおすすめ</SHeaderText>
         </SHeader>
@@ -211,7 +213,7 @@ export default function ResultsScreen() {
   const showMoreButton = filteredHobbies.length > HOBBIES_PER_PAGE;
 
   return (
-    <SContainer>
+    <SContainer style={{ paddingTop: insets.top + 16 }}>
       <SHeader>
         <SHeaderText>🌱 今日のおすすめ</SHeaderText>
       </SHeader>

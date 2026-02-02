@@ -4,15 +4,17 @@
  * 選択された趣味の詳細情報を表示
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 
 import { HurdleIndicator } from '@/components/features/hobby/HurdleIndicator';
+import { RatingButtons } from '@/components/features/hobby/RatingButtons';
+import { useHobbyLog } from '@/hooks/use-hobby-log';
 import hobbiesData from '@/data/hobbies.json';
 
-import type { YuruHobby } from '@/types';
+import type { YuruHobby, Rating } from '@/types';
 
 // ===================
 // Styled Components
@@ -29,6 +31,7 @@ const SScrollView = styled(ScrollView)`
 
 const SContent = styled.View`
   padding: ${({ theme }) => theme.spacing.xl}px;
+  padding-top: ${({ theme }) => theme.spacing.xxl}px;
 `;
 
 const SHeader = styled.View`
@@ -106,6 +109,51 @@ const SButtonContainer = styled.View`
   padding-bottom: ${({ theme }) => theme.spacing.xl}px;
 `;
 
+const SRatingSection = styled.View`
+  background-color: ${({ theme }) => theme.colors.surface};
+  padding: ${({ theme }) => theme.spacing.lg}px;
+  border-radius: ${({ theme }) => theme.borderRadius.lg}px;
+  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
+  align-items: center;
+
+  /* シャドウ（iOS） */
+  shadow-color: ${({ theme }) => theme.colors.shadow};
+  shadow-offset: 0px 4px;
+  shadow-opacity: 1;
+  shadow-radius: 12px;
+
+  /* シャドウ（Android） */
+  elevation: 3;
+`;
+
+const SRatingTitle = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
+  text-align: center;
+`;
+
+const SSuccessMessage = styled.View`
+  background-color: ${({ theme }) => theme.colors.rating.good};
+  padding: ${({ theme }) => theme.spacing.lg}px;
+  border-radius: ${({ theme }) => theme.borderRadius.lg}px;
+  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
+  align-items: center;
+`;
+
+const SSuccessEmoji = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.xxl}px;
+  margin-bottom: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const SSuccessText = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  text-align: center;
+`;
+
 const SPrimaryButton = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.colors.primary};
   padding-vertical: ${({ theme }) => theme.spacing.md}px;
@@ -162,6 +210,13 @@ const SErrorText = styled.Text`
 export default function HobbyDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { addEntry } = useHobbyLog();
+
+  // 評価選択の状態管理
+  const [showRating, setShowRating] = useState(false);
+  const [selectedRating, setSelectedRating] = useState<Rating | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   // IDから趣味を検索
   const hobby = useMemo(() => {
@@ -173,9 +228,27 @@ export default function HobbyDetailScreen() {
   }, [id]);
 
   const handleTryIt = () => {
-    // チケット007でログ機能を実装予定
-    if (__DEV__) {
-      console.log('やってみた！ボタンが押されました:', hobby?.id);
+    // 評価選択UIを表示
+    setShowRating(true);
+  };
+
+  const handleRate = async (rating: Rating) => {
+    if (!hobby || isSaving) return;
+
+    setSelectedRating(rating);
+    setIsSaving(true);
+
+    // ログを保存
+    const success = await addEntry(hobby.id, rating, hobbiesData as YuruHobby[]);
+
+    setIsSaving(false);
+
+    if (success) {
+      setIsSaved(true);
+      // 2秒後にログ画面へ遷移
+      setTimeout(() => {
+        router.push('/(tabs)/log');
+      }, 1500);
     }
   };
 
@@ -229,10 +302,31 @@ export default function HobbyDetailScreen() {
             ))}
           </STagsContainer>
 
+          {/* 保存成功メッセージ */}
+          {isSaved && (
+            <SSuccessMessage>
+              <SSuccessEmoji>🎉</SSuccessEmoji>
+              <SSuccessText>記録しました！ログ画面へ移動します...</SSuccessText>
+            </SSuccessMessage>
+          )}
+
+          {/* 評価選択UI */}
+          {showRating && !isSaved && (
+            <SRatingSection>
+              <SRatingTitle>どうでしたか？</SRatingTitle>
+              <RatingButtons
+                selectedRating={selectedRating}
+                onRate={handleRate}
+              />
+            </SRatingSection>
+          )}
+
           <SButtonContainer>
-            <SPrimaryButton onPress={handleTryIt} activeOpacity={0.8}>
-              <SPrimaryButtonText>やってみた！</SPrimaryButtonText>
-            </SPrimaryButton>
+            {!showRating && !isSaved && (
+              <SPrimaryButton onPress={handleTryIt} activeOpacity={0.8}>
+                <SPrimaryButtonText>やってみた！</SPrimaryButtonText>
+              </SPrimaryButton>
+            )}
 
             <SSecondaryButton onPress={handleBack} activeOpacity={0.8}>
               <SSecondaryButtonText>戻る</SSecondaryButtonText>

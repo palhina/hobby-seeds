@@ -10,6 +10,7 @@ import styled from 'styled-components/native';
 import * as Haptics from 'expo-haptics';
 
 import { useDiagnosis } from '@/hooks/use-diagnosis';
+import { DiagnosisHeader } from '@/components/features/diagnosis/DiagnosisHeader';
 import { ProgressBar } from '@/components/features/diagnosis/ProgressBar';
 import { QuestionText } from '@/components/features/diagnosis/QuestionText';
 import { DiagnosisCard } from '@/components/features/diagnosis/DiagnosisCard';
@@ -25,7 +26,7 @@ const SContainer = styled.SafeAreaView`
 
 const SHeader = styled.View`
   padding: ${({ theme }) => theme.spacing.lg}px;
-  padding-top: ${({ theme }) => theme.spacing.md}px;
+  padding-top: 0;
 `;
 
 const SContent = styled.View`
@@ -81,6 +82,7 @@ export default function DiagnosisQuestionScreen() {
 
   return (
     <SContainer>
+      <DiagnosisHeader />
       <SHeader>
         <ProgressBar
           current={currentQuestionIndex + 1}
