@@ -108,6 +108,7 @@ export function RatingButtons({ selectedRating, onRate }: RatingButtonsProps) {
         return (
           <SButton
             key={option.value}
+            testID={`rating-button-${option.value}`}
             selected={isSelected}
             rating={option.value}
             onPress={() => handlePress(option.value)}
