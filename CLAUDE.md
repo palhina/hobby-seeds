@@ -6,13 +6,14 @@
 
 ## 🎯 プロジェクト概要
 
-**プロジェクト名**: 趣味のたね (hobby-seeds)
+**プロジェクト名**: ゆる趣味さがし (hobby-seeds)
 
 **コンセプト**: 「何かしなきゃ」を「ちょっと試してみた」に変える
 
 休日にダラダラしてしまう罪悪感を解消するため、**超低ハードル**の趣味を提案し、小さな達成感を積み重ねるアプリ。iOSリリース練習用として開発。
 
 ### キーメッセージ
+
 > 「続かなくても大丈夫。試すことに意味がある」
 
 ---
@@ -21,13 +22,13 @@
 
 コード作成前に必ず以下のドキュメントを参照してください：
 
-| ドキュメント | 用途 | パス |
-|------------|------|------|
-| **TypeScript規約** | 型定義・命名規則 | `docs/TYPESCRIPT_RULES.md` |
-| **スタイリング規約** | styled-components・デザイン | `docs/STYLING_RULES.md` |
-| **テスト規約** | テストの書き方 | `docs/TESTING_RULES.md` |
-| **プロジェクト詳細** | 機能仕様・データ構造 | `PROJECT_SUMMARY.md` |
-| **開発規約** | コーディング規約全般 | `CLAUDE_MD_RULES.md` |
+| ドキュメント         | 用途                        | パス                       |
+| -------------------- | --------------------------- | -------------------------- |
+| **TypeScript規約**   | 型定義・命名規則            | `docs/TYPESCRIPT_RULES.md` |
+| **スタイリング規約** | styled-components・デザイン | `docs/STYLING_RULES.md`    |
+| **テスト規約**       | テストの書き方              | `docs/TESTING_RULES.md`    |
+| **プロジェクト詳細** | 機能仕様・データ構造        | `PROJECT_SUMMARY.md`       |
+| **開発規約**         | コーディング規約全般        | `CLAUDE_MD_RULES.md`       |
 
 ---
 
@@ -44,6 +45,7 @@
 - **バックエンド**: なし (完全ローカル完結)
 
 ### Expo設定
+
 - **New Architecture**: 有効
 - **React Compiler**: 有効
 - **Typed Routes**: 有効
@@ -89,6 +91,7 @@ hobby-seeds/
 ## 🚀 開発コマンド
 
 ### 開発サーバー起動
+
 ```bash
 # Metro bundler起動（WSL2環境のためトンネルモードを使用）
 npx expo start --tunnel
@@ -98,22 +101,27 @@ npm start -- --tunnel
 ```
 
 起動後、以下のオプションが利用可能：
+
 - **Android**: `npm run android` または `a` キー
 - **iOS**: `npm run ios` または `i` キー
 - **Web**: `npm run web` または `w` キー
 
 ### リンティング
+
 ```bash
 npm run lint
 ```
 
 ### TypeScript型チェック
+
 ```bash
 npx tsc --noEmit
 ```
+
 プロジェクトはstrict modeを使用しているため、型エラーは必ず修正してください。
 
 ### テスト実行（今後追加予定）
+
 ```bash
 # 全テスト実行
 npm test
@@ -126,9 +134,11 @@ npm test -- --watch
 ```
 
 ### プロジェクトリセット
+
 ```bash
 npm run reset-project
 ```
+
 スターターコードを`app-example/`に移動し、空の`app/`ディレクトリを作成します。
 
 ---
@@ -159,11 +169,11 @@ npm run reset-project
 
 ```typescript
 // ✅ エイリアスパスを使用
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Colors } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 
 // ❌ 相対パスは使わない（長くなる場合）
-import { Colors } from '../../../constants/theme';
+import { Colors } from "../../../constants/theme";
 ```
 
 ### プラットフォーム別ファイル
@@ -184,20 +194,20 @@ import { Colors } from '../../../constants/theme';
 // constants/theme.ts
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: '#0a7ea4',
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: '#0a7ea4',
+    text: "#11181C",
+    background: "#fff",
+    tint: "#0a7ea4",
+    icon: "#687076",
+    tabIconDefault: "#687076",
+    tabIconSelected: "#0a7ea4",
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: '#fff',
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: '#fff',
+    text: "#ECEDEE",
+    background: "#151718",
+    tint: "#fff",
+    icon: "#9BA1A6",
+    tabIconDefault: "#9BA1A6",
+    tabIconSelected: "#fff",
   },
 };
 ```
@@ -220,24 +230,24 @@ export const Colors = {
 
 ```typescript
 // 1. React / React Native
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { View, Text, Pressable } from "react-native";
 
 // 2. 外部ライブラリ
-import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import styled from 'styled-components/native';
+import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import styled from "styled-components/native";
 
 // 3. 内部モジュール（エイリアスパス）
-import { useHobbyLog } from '@/hooks/useHobbyLog';
-import { filterHobbies } from '@/utils/filterHobby';
-import { STORAGE_KEYS } from '@/constants/storageKeys';
+import { useHobbyLog } from "@/hooks/useHobbyLog";
+import { filterHobbies } from "@/utils/filterHobby";
+import { STORAGE_KEYS } from "@/constants/storageKeys";
 
 // 4. 型（type-only import）
-import type { YuruHobby, Rating } from '@/types';
+import type { YuruHobby, Rating } from "@/types";
 
 // 5. ローカルファイル（相対パス）
-import { SCardContainer, STitle } from './styles';
+import { SCardContainer, STitle } from "./styles";
 ```
 
 ### コンポーネント規約
@@ -316,9 +326,6 @@ if (__DEV__) {
   console.error('Error:', error);
 }
 
-// ❌ コメントアウトされたコードの残置
-// const oldFunction = () => { ... };
-
 // ❌ 未使用のimport
 import { SomeUnusedComponent } from '@/components';
 
@@ -328,17 +335,17 @@ import { UsedComponent } from '@/components';
 
 ### 命名規則
 
-| 種類 | 規則 | 例 |
-|------|------|-----|
-| コンポーネント | PascalCase | `HobbyCard`, `RatingButton` |
-| Props型 | `{Component}Props` | `HobbyCardProps` |
-| スタイル | PascalCase（意味のある名前） | `Container`, `Title`, `ActionButton` |
-| 変数 | camelCase | `selectedHobby`, `userAnswers` |
-| 定数 | SCREAMING_SNAKE_CASE | `STORAGE_KEYS`, `MAX_SUGGESTIONS` |
-| Boolean | is/has/can 接頭辞 | `isLoading`, `hasLiked` |
-| ハンドラ関数 | `handle{Action}` | `handlePress`, `handleSubmit` |
-| イベントハンドラProp | `on{Action}` | `onPress`, `onSubmit` |
-| カスタムフック | `use{Name}` | `useHobbyLog`, `useColorScheme` |
+| 種類                 | 規則                         | 例                                   |
+| -------------------- | ---------------------------- | ------------------------------------ |
+| コンポーネント       | PascalCase                   | `HobbyCard`, `RatingButton`          |
+| Props型              | `{Component}Props`           | `HobbyCardProps`                     |
+| スタイル             | PascalCase（意味のある名前） | `Container`, `Title`, `ActionButton` |
+| 変数                 | camelCase                    | `selectedHobby`, `userAnswers`       |
+| 定数                 | SCREAMING_SNAKE_CASE         | `STORAGE_KEYS`, `MAX_SUGGESTIONS`    |
+| Boolean              | is/has/can 接頭辞            | `isLoading`, `hasLiked`              |
+| ハンドラ関数         | `handle{Action}`             | `handlePress`, `handleSubmit`        |
+| イベントハンドラProp | `on{Action}`                 | `onPress`, `onSubmit`                |
+| カスタムフック       | `use{Name}`                  | `useHobbyLog`, `useColorScheme`      |
 
 ---
 
@@ -350,21 +357,21 @@ import { UsedComponent } from '@/components';
 // constants/storageKeys.ts
 export const STORAGE_KEYS = {
   // プレフィックス: @hobby-seeds/
-  HOBBY_LOG: '@hobby-seeds/hobby-log',
-  DIAGNOSIS_HISTORY: '@hobby-seeds/diagnosis-history',
-  PREFERENCES: '@hobby-seeds/preferences',
-  FIRST_LAUNCH: '@hobby-seeds/first-launch',
+  HOBBY_LOG: "@hobby-seeds/hobby-log",
+  DIAGNOSIS_HISTORY: "@hobby-seeds/diagnosis-history",
+  PREFERENCES: "@hobby-seeds/preferences",
+  FIRST_LAUNCH: "@hobby-seeds/first-launch",
 } as const;
 
-export type StorageKey = typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS];
+export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
 ```
 
 ### カスタムフックでラップ
 
 ```typescript
 // hooks/useAsyncStorage.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import type { StorageKey } from '@/constants/storageKeys';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import type { StorageKey } from "@/constants/storageKeys";
 
 export function useAsyncStorage<T>(key: StorageKey) {
   const getItem = async (): Promise<T | null> => {
@@ -409,13 +416,13 @@ export function useAsyncStorage<T>(key: StorageKey) {
 // ✅ AsyncStorage操作
 async function saveLog(entry: HobbyLogEntry): Promise<boolean> {
   try {
-    const logs = await getItem<HobbyLog[]>(STORAGE_KEYS.HOBBY_LOG) ?? [];
+    const logs = (await getItem<HobbyLog[]>(STORAGE_KEYS.HOBBY_LOG)) ?? [];
     logs.push(entry);
     await setItem(STORAGE_KEYS.HOBBY_LOG, logs);
     return true;
   } catch (error) {
     if (__DEV__) {
-      console.error('Failed to save log:', error);
+      console.error("Failed to save log:", error);
     }
     return false;
   }
@@ -444,7 +451,7 @@ const topTags = Object.entries(tagCount)
 
 // ✅ TODO（必ず理由と担当を記載）
 // TODO(username): API連携時にサーバーから取得するよう変更
-const hobbies = require('@/data/hobbies.json');
+const hobbies = require("@/data/hobbies.json");
 ```
 
 ### 書かないコメント
@@ -467,7 +474,7 @@ const hobbies = getHobbies();
 
 ```typescript
 // 遷移元
-import { useRouter } from 'expo-router';
+import { useRouter } from "expo-router";
 
 function DiagnosisScreen() {
   const router = useRouter();
@@ -475,14 +482,14 @@ function DiagnosisScreen() {
   const handleComplete = (answers: DiagnosisAnswer) => {
     // パラメータはJSON文字列化して渡す
     router.push({
-      pathname: '/results',
+      pathname: "/results",
       params: { answers: JSON.stringify(answers) },
     });
   };
 }
 
 // 遷移先
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from "expo-router";
 
 function ResultsScreen() {
   const { answers: answersJson } = useLocalSearchParams<{ answers: string }>();
@@ -509,14 +516,15 @@ function ResultsScreen() {
    - Omit/Pickとの相性が良い
 
 4. **リテラル型とユニオン型を活用**
+
    ```typescript
-   type EnergyLevel = 'low' | 'medium' | 'high';
-   type Rating = 'meh' | 'good' | 'great';
+   type EnergyLevel = "low" | "medium" | "high";
+   type Rating = "meh" | "good" | "great";
    ```
 
 5. **型のエクスポートは`@/types`から**
    ```typescript
-   import type { YuruHobby, Rating } from '@/types';
+   import type { YuruHobby, Rating } from "@/types";
    ```
 
 ---
@@ -527,11 +535,11 @@ function ResultsScreen() {
 
 ### カバレッジ目標
 
-| 対象 | 目標 | 優先度 |
-|------|------|--------|
+| 対象              | 目標    | 優先度 |
+| ----------------- | ------- | ------ |
 | utils（ロジック） | 80%以上 | 最優先 |
-| hooks | 70%以上 | 高 |
-| コンポーネント | 70%以上 | 中 |
+| hooks             | 70%以上 | 高     |
+| コンポーネント    | 70%以上 | 中     |
 
 ### テストの配置
 
@@ -562,6 +570,7 @@ src/
 ### 重要なポイント
 
 1. **styled-componentsには必ずSプレフィックスを付ける**
+
    ```typescript
    // ✅ 正しい
    const SContainer = styled.View``;
@@ -574,6 +583,7 @@ src/
    ```
 
 2. **必ずthemeから値を参照する**
+
    ```typescript
    // ✅ 正しい
    const SContainer = styled.View`
@@ -591,6 +601,7 @@ src/
    ```
 
 3. **インラインスタイル禁止**
+
    ```typescript
    // ❌ 禁止
    <View style={{ padding: 16, backgroundColor: '#fff' }}>
@@ -607,11 +618,11 @@ src/
 5. **主要カラーパレット**（詳細は`docs/STYLING_RULES.md`参照）
    ```typescript
    theme.colors = {
-     primary: '#FF9F7A',        // コーラルオレンジ
-     background: '#FFF8F3',     // クリームホワイト
-     textPrimary: '#4A3728',    // ダークブラウン
+     primary: "#FF9F7A", // コーラルオレンジ
+     background: "#FFF8F3", // クリームホワイト
+     textPrimary: "#4A3728", // ダークブラウン
      // ...
-   }
+   };
    ```
 
 ---
@@ -689,25 +700,29 @@ src/
 ## 🎯 開発の優先順位
 
 ### Phase 1: 基本セットアップ
+
 1. ディレクトリ構成の整備（types/, utils/, data/）
 2. 趣味データの準備（hobbies.json）
 3. 基本型定義（YuruHobby, StepUpHobby, etc.）
 
 ### Phase 2: 基本機能実装
+
 4. 気分診断画面（3問）
 5. 趣味提案画面（フィルタリングロジック）
 6. AsyncStorage連携（ログ機能）
 
 ### Phase 3: 高度な機能
+
 7. タグ分析ロジック
 8. ステップアップ提案
 9. アニメーション・デザイン調整
 
 ### Phase 4: 仕上げ
+
 10. テストの追加
 11. 実機テスト
 12. App Store提出準備
 
 ---
 
-*最終更新: 2026年2月1日*
+_最終更新: 2026年2月1日_

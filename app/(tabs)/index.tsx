@@ -78,7 +78,7 @@ export default function HomeScreen() {
     <SContainer style={{ paddingTop: insets.top }}>
       <SContent>
         <SEmoji>🌱</SEmoji>
-        <STitle>趣味のたね</STitle>
+        <STitle>ゆる趣味さがし</STitle>
         <SSubtitle>
           「何かしなきゃ」を{'\n'}
           「ちょっと試してみた」に変える
