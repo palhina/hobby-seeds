@@ -5,7 +5,7 @@
 ユーザーが「😊 良かった」を3回以上記録したら、本格的な趣味（ステップアップ趣味）を提案する機能を実装。
 タグ分析結果に基づいて、関連するステップアップ趣味をマッチング。
 
-## ステータス: 🔴 未着手
+## ステータス: 🟢 完了
 
 ## 依存関係
 
@@ -37,47 +37,47 @@ components/
 ## TODO
 
 ### ステップアップ解放条件
-- [ ] greatCount >= 3 で解放
-- [ ] 解放状態の保存（FIRST_STEPUP_SHOWN フラグ）
-- [ ] 解放時の通知表示
+- [x] greatCount >= 3 で解放
+- [x] 解放状態の保存（FIRST_STEPUP_SHOWN フラグ）
+- [x] 解放時の通知表示
 
 ### utils/match-stepup.ts
-- [ ] matchStepUpHobbies 関数
-  - [ ] topTags と matchTags のマッチング
-  - [ ] スコア計算（マッチするタグ数）
-  - [ ] スコア順にソート
-- [ ] isStepUpUnlocked 関数
-  - [ ] greatCount の判定
+- [x] matchStepUpHobbies 関数
+  - [x] topTags と matchTags のマッチング
+  - [x] スコア計算（マッチするタグ数）
+  - [x] スコア順にソート
+- [x] isStepUpUnlocked 関数
+  - [x] greatCount の判定
 
 ### app/stepup/index.tsx
-- [ ] マッチしたステップアップ趣味の一覧表示
-- [ ] 解放バナー（初回のみ）
-- [ ] 空状態（マッチなしの場合）
+- [x] マッチしたステップアップ趣味の一覧表示
+- [x] 解放バナー（初回のみ）
+- [x] 空状態（マッチなしの場合）
 
 ### app/stepup/[id].tsx
-- [ ] ステップアップ趣味の詳細表示
-- [ ] 始め方ガイド
-- [ ] 次のステップリスト
-- [ ] 初期コスト・時間コミット表示
+- [x] ステップアップ趣味の詳細表示
+- [x] 始め方ガイド
+- [x] 次のステップリスト
+- [x] 初期コスト・時間コミット表示
 
 ### components/features/stepup/StepUpCard.tsx
-- [ ] 趣味名・絵文字
-- [ ] 簡単な説明
-- [ ] マッチ度表示（オプション）
+- [x] 趣味名・絵文字
+- [x] 簡単な説明
+- [x] マッチ度表示（オプション）
 
 ### components/features/stepup/StepUpDetail.tsx
-- [ ] 詳細説明
-- [ ] startGuide（始め方）
-- [ ] startCost（初期コスト）
-- [ ] timeCommit（時間コミット）
+- [x] 詳細説明
+- [x] startGuide（始め方）
+- [x] startCost（初期コスト）
+- [x] timeCommit（時間コミット）
 
 ### components/features/stepup/NextStepList.tsx
-- [ ] nextSteps の表示
-- [ ] ステップ番号付きリスト
+- [x] nextSteps の表示
+- [x] ステップ番号付きリスト
 
 ### components/features/stepup/UnlockBanner.tsx
-- [ ] 祝福メッセージ
-- [ ] アニメーション（オプション）
+- [x] 祝福メッセージ
+- [x] アニメーション（オプション）
 
 ---
 
@@ -245,12 +245,12 @@ if (isStepUpUnlocked(greatCount) && !hasShownStepUpBanner) {
 
 ## 完了条件
 
-- [ ] greatCount >= 3 でステップアップ画面にアクセス可能
-- [ ] タグマッチングが正しく動作する
-- [ ] ステップアップ詳細が表示される
-- [ ] 解放バナーが初回のみ表示される
-- [ ] styled-componentsでテーマから値を参照している
-- [ ] `npx tsc --noEmit` でエラーがないこと
+- [x] greatCount >= 3 でステップアップ画面にアクセス可能
+- [x] タグマッチングが正しく動作する
+- [x] ステップアップ詳細が表示される
+- [x] 解放バナーが初回のみ表示される
+- [x] styled-componentsでテーマから値を参照している
+- [x] `npx tsc --noEmit` でエラーがないこと
 
 ---
 
