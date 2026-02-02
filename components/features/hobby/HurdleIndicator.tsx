@@ -24,10 +24,17 @@ type HurdleIndicatorProps = {
 // ===================
 
 const SContainer = styled.View`
-  flex-direction: row;
   align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs}px;
+`;
+
+const STopRow = styled.View`
+  align-items: center;
+`;
+
+const SBottomRow = styled.View`
+  flex-direction: row;
   justify-content: center;
-  flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.sm}px;
 `;
 
@@ -43,7 +50,6 @@ const SBadgeText = styled.Text`
   font-size: ${({ theme }) => theme.typography.fontSize.xs}px;
   color: ${({ theme }) => theme.colors.textSecondary};
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  margin-left: ${({ theme }) => theme.spacing.xs}px;
 `;
 
 // ===================
@@ -53,20 +59,26 @@ const SBadgeText = styled.Text`
 export function HurdleIndicator({ time, cost, location }: HurdleIndicatorProps) {
   // 0円の場合は"0円"、それ以外は実際の金額を表示
   const costDisplay = cost === 0 ? '0円' : `${cost}円`;
+  // 場所のアイコン
+  const locationIcon = location === '家' ? '🏠' : '🚶';
 
   return (
     <SContainer>
-      <SBadge>
-        <SBadgeText>⏱️ {time}分</SBadgeText>
-      </SBadge>
+      <STopRow>
+        <SBadge>
+          <SBadgeText>⏱️ {time}分</SBadgeText>
+        </SBadge>
+      </STopRow>
 
-      <SBadge>
-        <SBadgeText>💰 {costDisplay}</SBadgeText>
-      </SBadge>
+      <SBottomRow>
+        <SBadge>
+          <SBadgeText>💰 {costDisplay}</SBadgeText>
+        </SBadge>
 
-      <SBadge>
-        <SBadgeText>🏠 {location}</SBadgeText>
-      </SBadge>
+        <SBadge>
+          <SBadgeText>{locationIcon} {location}</SBadgeText>
+        </SBadge>
+      </SBottomRow>
     </SContainer>
   );
 }

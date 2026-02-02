@@ -9,7 +9,9 @@
 
 import React, { useMemo } from 'react';
 import { FlatList } from 'react-native';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useHobbyLog } from '@/hooks/use-hobby-log';
 import { LogEntry } from '@/components/features/log/LogEntry';
@@ -21,11 +23,17 @@ import hobbiesData from '@/data/hobbies.json';
 
 import type { HobbyLogEntry } from '@/types';
 
+// ソート用の型（オリジナルインデックスを保持）
+type SortedEntry = {
+  entry: HobbyLogEntry;
+  originalIndex: number;
+};
+
 // ===================
 // Styled Components
 // ===================
 
-const SContainer = styled.SafeAreaView`
+const SContainer = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
 `;
@@ -64,18 +72,64 @@ const SLoadingText = styled.Text`
   color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
+const SStepUpHint = styled.View`
+  background-color: ${({ theme }) => theme.colors.primaryLight};
+  padding: ${({ theme }) => theme.spacing.md}px;
+  border-radius: ${({ theme }) => theme.borderRadius.md}px;
+  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const SStepUpHintEmoji = styled.Text`
+  font-size: 24px;
+  margin-right: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const SStepUpHintText = styled.Text`
+  flex: 1;
+  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  line-height: ${({ theme }) => theme.typography.fontSize.sm * 1.5}px;
+`;
+
+const SStepUpButton = styled.Pressable`
+  background-color: ${({ theme }) => theme.colors.primary};
+  padding: ${({ theme }) => theme.spacing.md}px;
+  border-radius: ${({ theme }) => theme.borderRadius.md}px;
+  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const SStepUpButtonEmoji = styled.Text`
+  font-size: 20px;
+  margin-right: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const SStepUpButtonText = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  color: #FFFFFF;
+`;
+
 // ===================
 // Component
 // ===================
 
 export default function LogScreen() {
-  const { log, isLoading } = useHobbyLog();
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const { log, isLoading, deleteEntry } = useHobbyLog();
 
-  // エントリーを新しい順にソート
+  // エントリーを新しい順にソート（オリジナルインデックスを保持）
   const sortedEntries = useMemo(() => {
-    return [...log.entries].sort((a, b) => {
-      return new Date(b.loggedAt).getTime() - new Date(a.loggedAt).getTime();
-    });
+    return log.entries
+      .map((entry, index) => ({ entry, originalIndex: index }))
+      .sort((a, b) => {
+        return new Date(b.entry.loggedAt).getTime() - new Date(a.entry.loggedAt).getTime();
+      });
   }, [log.entries]);
 
   // 趣味情報を取得するヘルパー関数
@@ -87,16 +141,31 @@ export default function LogScreen() {
     };
   };
 
+  // 削除ハンドラ
+  const handleDelete = async (originalIndex: number) => {
+    await deleteEntry(originalIndex, hobbiesData);
+  };
+
   // ログエントリーをレンダリング
-  const renderLogEntry = ({ item }: { item: HobbyLogEntry }) => {
-    const { name, emoji } = getHobbyInfo(item.hobbyId);
+  const renderLogEntry = ({ item }: { item: SortedEntry }) => {
+    const { name, emoji } = getHobbyInfo(item.entry.hobbyId);
     return (
       <LogEntry
-        entry={item}
+        entry={item.entry}
         hobbyName={name}
         hobbyEmoji={emoji}
+        onDelete={() => handleDelete(item.originalIndex)}
       />
     );
+  };
+
+  // ステップアップ解放までの残り回数
+  const remainingToUnlock = Math.max(0, 3 - log.greatCount);
+  const isStepUpUnlocked = log.greatCount >= 3;
+
+  // ステップアップ画面へ遷移
+  const handleStepUpPress = () => {
+    router.push('/stepup');
   };
 
   // ヘッダーコンポーネント
@@ -106,17 +175,36 @@ export default function LogScreen() {
     }
 
     return (
-      <LogStats
-        totalCount={log.entries.length}
-        greatCount={log.greatCount}
-        topTags={log.topTags}
-      />
+      <>
+        {/* ステップアップ解放済みの場合はボタンを表示 */}
+        {isStepUpUnlocked && (
+          <SStepUpButton onPress={handleStepUpPress}>
+            <SStepUpButtonEmoji>🚀</SStepUpButtonEmoji>
+            <SStepUpButtonText>ステップアップ趣味をみる</SStepUpButtonText>
+          </SStepUpButton>
+        )}
+        {/* 未解放の場合はヒントを表示 */}
+        {remainingToUnlock > 0 && (
+          <SStepUpHint>
+            <SStepUpHintEmoji>🌟</SStepUpHintEmoji>
+            <SStepUpHintText>
+              あと{remainingToUnlock}回の「楽しかった😊」を集めると、{'\n'}
+              ステップアップ趣味が解放されます！
+            </SStepUpHintText>
+          </SStepUpHint>
+        )}
+        <LogStats
+          totalCount={log.entries.length}
+          greatCount={log.greatCount}
+          topTags={log.topTags}
+        />
+      </>
     );
   };
 
   if (isLoading) {
     return (
-      <SContainer>
+      <SContainer style={{ paddingTop: insets.top + 16 }}>
         <SHeader>
           <SHeaderTitle>記録</SHeaderTitle>
           <SHeaderSubtitle>試した趣味の履歴</SHeaderSubtitle>
@@ -129,7 +217,7 @@ export default function LogScreen() {
   }
 
   return (
-    <SContainer>
+    <SContainer style={{ paddingTop: insets.top + 16 }}>
       <SHeader>
         <SHeaderTitle>記録</SHeaderTitle>
         <SHeaderSubtitle>試した趣味の履歴</SHeaderSubtitle>
@@ -141,7 +229,7 @@ export default function LogScreen() {
           <FlatList
             data={sortedEntries}
             renderItem={renderLogEntry}
-            keyExtractor={(item, index) => `${item.hobbyId}-${item.loggedAt}-${index}`}
+            keyExtractor={(item) => `${item.entry.hobbyId}-${item.entry.loggedAt}-${item.originalIndex}`}
             ListHeaderComponent={ListHeaderComponent}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 24 }}

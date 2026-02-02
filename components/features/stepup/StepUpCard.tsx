@@ -155,7 +155,7 @@ export function StepUpCard({ hobby, matchScore, matchedTags, onPress }: StepUpCa
           <SInfoValue>{hobby.startCost}</SInfoValue>
         </SInfoItem>
         <SInfoItem>
-          <SInfoLabel>時間コミット</SInfoLabel>
+          <SInfoLabel>かかる時間</SInfoLabel>
           <SInfoValue>{hobby.timeCommit}</SInfoValue>
         </SInfoItem>
       </SInfoRow>

@@ -118,3 +118,43 @@ export function selectRandomHobbies(hobbies: YuruHobby[], count: number): YuruHo
   // 指定された数だけ返す（リストがcount未満の場合は全て返す）
   return shuffled.slice(0, count);
 }
+
+
+/**
+ * 外出希望を考慮して趣味を優先選択する
+ *
+ * @param hobbies - 選択対象の趣味リスト
+ * @param count - 選択する趣味の数
+ * @param preferOutdoor - 屋外を優先するかどうか
+ * @returns 優先度を考慮して選択された趣味のリスト
+ *
+ * @remarks
+ * - preferOutdoor=true の場合、屋外趣味を優先的に選択
+ * - 屋外趣味が足りない場合は室内趣味で補完
+ * - preferOutdoor=false の場合は通常のランダム選択
+ */
+export function selectHobbiesWithPriority(
+  hobbies: YuruHobby[],
+  count: number,
+  preferOutdoor: boolean
+): YuruHobby[] {
+  if (!preferOutdoor) {
+    return selectRandomHobbies(hobbies, count);
+  }
+
+  // 屋外と室内で分離
+  const outdoorHobbies = hobbies.filter((h) => !h.indoor);
+  const indoorHobbies = hobbies.filter((h) => h.indoor);
+
+  // 屋外趣味をランダムに選択
+  const selectedOutdoor = selectRandomHobbies(outdoorHobbies, count);
+
+  // 屋外趣味が足りない場合は室内で補完
+  if (selectedOutdoor.length < count) {
+    const remaining = count - selectedOutdoor.length;
+    const selectedIndoor = selectRandomHobbies(indoorHobbies, remaining);
+    return [...selectedOutdoor, ...selectedIndoor];
+  }
+
+  return selectedOutdoor;
+}

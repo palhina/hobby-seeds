@@ -79,6 +79,7 @@ export function useHobbyLog() {
 
   /**
    * 新しいログエントリーを追加
+   * AsyncStorageから最新のデータを取得してから追加する（競合回避）
    */
   const addEntry = useCallback(async (
     hobbyId: number,
@@ -86,13 +87,16 @@ export function useHobbyLog() {
     hobbiesData: any[]
   ): Promise<boolean> => {
     try {
+      // AsyncStorageから最新のログを取得（state の古いデータを使わない）
+      const currentLog = await getItem() ?? createEmptyLog();
+
       const newEntry: HobbyLogEntry = {
         hobbyId,
         rating,
         loggedAt: new Date().toISOString(),
       };
 
-      const updatedEntries = [...log.entries, newEntry];
+      const updatedEntries = [...currentLog.entries, newEntry];
       const greatCount = countGreatRatings(updatedEntries);
       const topTags = calculateTopTags(updatedEntries, hobbiesData);
 
@@ -115,7 +119,45 @@ export function useHobbyLog() {
       }
       return false;
     }
-  }, [log, setItem]);
+  }, [getItem, setItem]);
+
+  /**
+   * ログエントリーを削除
+   * indexで指定したエントリーを削除する
+   * AsyncStorageから最新のデータを取得してから削除する（競合回避）
+   */
+  const deleteEntry = useCallback(async (
+    index: number,
+    hobbiesData: any[]
+  ): Promise<boolean> => {
+    try {
+      // AsyncStorageから最新のログを取得
+      const currentLog = await getItem() ?? createEmptyLog();
+
+      const updatedEntries = currentLog.entries.filter((_, i) => i !== index);
+      const greatCount = countGreatRatings(updatedEntries);
+      const topTags = calculateTopTags(updatedEntries, hobbiesData);
+
+      const updatedLog: HobbyLog = {
+        entries: updatedEntries,
+        greatCount,
+        topTags,
+      };
+
+      const success = await setItem(updatedLog);
+
+      if (success) {
+        setLog(updatedLog);
+      }
+
+      return success;
+    } catch (error) {
+      if (__DEV__) {
+        console.error('Failed to delete log entry:', error);
+      }
+      return false;
+    }
+  }, [getItem, setItem]);
 
   /**
    * ステップアップ趣味が解放されているかチェック
@@ -135,6 +177,7 @@ export function useHobbyLog() {
     isLoading,
     loadLog,
     addEntry,
+    deleteEntry,
     isStepUpUnlocked,
   };
 }

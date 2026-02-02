@@ -22,6 +22,7 @@ const MAPPING = {
   'book.fill': 'menu-book',
   'magnifyingglass': 'search',
   'xmark': 'close',
+  'trash': 'delete',
 } as IconMapping;
 
 /**

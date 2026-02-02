@@ -40,13 +40,13 @@ const SContainer = styled.View`
 `;
 
 const SHeader = styled.View`
-  padding: ${({ theme }) => theme.spacing.md}px ${({ theme }) => theme.spacing.lg}px;
-  padding-bottom: ${({ theme }) => theme.spacing.md}px;
+  padding: ${({ theme }) => theme.spacing.lg}px;
+  padding-top: ${({ theme }) => theme.spacing.xl}px;
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const SHeaderTitle = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
+  font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   color: ${({ theme }) => theme.colors.textPrimary};
 `;

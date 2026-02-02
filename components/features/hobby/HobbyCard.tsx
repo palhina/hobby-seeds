@@ -29,6 +29,7 @@ const SCard = styled.Pressable`
   border-radius: ${({ theme }) => theme.borderRadius.lg}px;
   padding: ${({ theme }) => theme.spacing.lg}px;
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
+  height: 220px;
 
   /* シャドウ（iOS） */
   shadow-color: ${({ theme }) => theme.colors.shadow};
@@ -41,21 +42,22 @@ const SCard = styled.Pressable`
 `;
 
 const SEmoji = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.display}px;
+  font-size: 40px;
   text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+  margin-bottom: ${({ theme }) => theme.spacing.sm}px;
 `;
 
 const SName = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
+  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
   color: ${({ theme }) => theme.colors.textPrimary};
   text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+  margin-bottom: ${({ theme }) => theme.spacing.sm}px;
+  number-of-lines: 2;
 `;
 
 const SHurdleContainer = styled.View`
-  margin-top: ${({ theme }) => theme.spacing.sm}px;
+  margin-top: auto;
 `;
 
 // ===================

@@ -142,6 +142,34 @@ const SSuccessMessage = styled.View`
   align-items: center;
 `;
 
+const SUnlockMessage = styled.View`
+  background-color: ${({ theme }) => theme.colors.primary};
+  padding: ${({ theme }) => theme.spacing.xl}px;
+  border-radius: ${({ theme }) => theme.borderRadius.lg}px;
+  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
+  align-items: center;
+`;
+
+const SUnlockEmoji = styled.Text`
+  font-size: 48px;
+  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+`;
+
+const SUnlockTitle = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: #FFFFFF;
+  text-align: center;
+  margin-bottom: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const SUnlockText = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
+  color: #FFFFFF;
+  text-align: center;
+  opacity: 0.9;
+`;
+
 const SSuccessEmoji = styled.Text`
   font-size: ${({ theme }) => theme.typography.fontSize.xxl}px;
   margin-bottom: ${({ theme }) => theme.spacing.sm}px;
@@ -210,13 +238,14 @@ const SErrorText = styled.Text`
 export default function HobbyDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { addEntry } = useHobbyLog();
+  const { addEntry, log } = useHobbyLog();
 
   // 評価選択の状態管理
   const [showRating, setShowRating] = useState(false);
   const [selectedRating, setSelectedRating] = useState<Rating | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [isFirstUnlock, setIsFirstUnlock] = useState(false);
 
   // IDから趣味を検索
   const hobby = useMemo(() => {
@@ -238,6 +267,9 @@ export default function HobbyDetailScreen() {
     setSelectedRating(rating);
     setIsSaving(true);
 
+    // 保存前のgreatCountを記録（初回解放判定用）
+    const previousGreatCount = log.greatCount;
+
     // ログを保存
     const success = await addEntry(hobby.id, rating, hobbiesData as YuruHobby[]);
 
@@ -245,10 +277,20 @@ export default function HobbyDetailScreen() {
 
     if (success) {
       setIsSaved(true);
-      // 2秒後にログ画面へ遷移
+
+      // 初回ステップアップ解放の判定
+      // 以前は3未満で、今回のレーティングで3以上になった場合
+      const newGreatCount = previousGreatCount + (rating === 'great' ? 1 : 0);
+      const isFirstStepUpUnlock = previousGreatCount < 3 && newGreatCount >= 3;
+
+      if (isFirstStepUpUnlock) {
+        setIsFirstUnlock(true);
+      }
+
+      // 常に記録画面へ遷移（ステップアップへの自動遷移は廃止）
       setTimeout(() => {
         router.push('/(tabs)/log');
-      }, 1500);
+      }, isFirstStepUpUnlock ? 2500 : 1500);
     }
   };
 
@@ -302,8 +344,20 @@ export default function HobbyDetailScreen() {
             ))}
           </STagsContainer>
 
-          {/* 保存成功メッセージ */}
-          {isSaved && (
+          {/* ステップアップ解放メッセージ */}
+          {isSaved && isFirstUnlock && (
+            <SUnlockMessage>
+              <SUnlockEmoji>🎊</SUnlockEmoji>
+              <SUnlockTitle>おめでとうございます！</SUnlockTitle>
+              <SUnlockText>
+                ステップアップ趣味が解放されました！{'\n'}
+                記録画面から確認できます
+              </SUnlockText>
+            </SUnlockMessage>
+          )}
+
+          {/* 通常の保存成功メッセージ */}
+          {isSaved && !isFirstUnlock && (
             <SSuccessMessage>
               <SSuccessEmoji>🎉</SSuccessEmoji>
               <SSuccessText>記録しました！ログ画面へ移動します...</SSuccessText>

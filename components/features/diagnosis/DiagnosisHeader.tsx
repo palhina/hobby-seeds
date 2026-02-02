@@ -7,6 +7,7 @@
 import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 import * as Haptics from 'expo-haptics';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { theme } from '@/constants/theme';
@@ -31,7 +32,6 @@ const SContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   padding: ${({ theme }) => theme.spacing.md}px;
-  padding-top: ${({ theme }) => theme.spacing.lg}px;
 `;
 
 const SButton = styled.Pressable`
@@ -55,6 +55,7 @@ export function DiagnosisHeader({
   onBack,
 }: DiagnosisHeaderProps) {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const handleBack = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -72,7 +73,7 @@ export function DiagnosisHeader({
   };
 
   return (
-    <SContainer>
+    <SContainer style={{ paddingTop: insets.top + 8 }}>
       {showBackButton ? (
         <SButton onPress={handleBack}>
           <IconSymbol name="chevron.left" size={28} color={theme.colors.primary} />
