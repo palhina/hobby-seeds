@@ -10,9 +10,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import * as Haptics from 'expo-haptics';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HobbyCard } from '@/components/features/hobby/HobbyCard';
-import { filterHobbiesByDiagnosis, selectRandomHobbies } from '@/utils/filter-hobbies';
+import { filterHobbiesByDiagnosis, selectHobbiesWithPriority } from '@/utils/filter-hobbies';
 import hobbiesData from '@/data/hobbies.json';
 
 import type { DiagnosisAnswer, YuruHobby } from '@/types';
@@ -21,7 +22,7 @@ import type { DiagnosisAnswer, YuruHobby } from '@/types';
 // Styled Components
 // ===================
 
-const SContainer = styled.SafeAreaView`
+const SContainer = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
 `;
@@ -120,6 +121,7 @@ const HOBBIES_PER_PAGE = 4;
 
 export default function ResultsScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { answers: answersJson } = useLocalSearchParams<{ answers: string }>();
 
   // 回答データをパース
@@ -139,11 +141,14 @@ export default function ResultsScreen() {
   const [displayedHobbies, setDisplayedHobbies] = useState<YuruHobby[]>([]);
 
   // filteredHobbiesが変わったら表示をリセット
+  // 外出希望の場合は屋外趣味を優先
   useEffect(() => {
-    if (filteredHobbies.length > 0) {
-      setDisplayedHobbies(selectRandomHobbies(filteredHobbies, HOBBIES_PER_PAGE));
+    if (filteredHobbies.length > 0 && answers) {
+      setDisplayedHobbies(
+        selectHobbiesWithPriority(filteredHobbies, HOBBIES_PER_PAGE, answers.goOut)
+      );
     }
-  }, [filteredHobbies]);
+  }, [filteredHobbies, answers]);
 
   // 「他にもみる」で別の趣味を表示
   const handleShowMore = useCallback(() => {
@@ -152,24 +157,30 @@ export default function ResultsScreen() {
     // 現在表示中のIDを除外して選択（可能であれば）
     const currentIds = new Set(displayedHobbies.map((h) => h.id));
     const remainingHobbies = filteredHobbies.filter((h) => !currentIds.has(h.id));
+    const preferOutdoor = answers?.goOut ?? false;
 
     if (remainingHobbies.length >= HOBBIES_PER_PAGE) {
       // 未表示の趣味が十分ある場合はそこから選択
-      setDisplayedHobbies(selectRandomHobbies(remainingHobbies, HOBBIES_PER_PAGE));
+      setDisplayedHobbies(
+        selectHobbiesWithPriority(remainingHobbies, HOBBIES_PER_PAGE, preferOutdoor)
+      );
     } else if (remainingHobbies.length > 0) {
       // 未表示の趣味が足りない場合は、未表示分＋既存からランダムに補完
       const fromRemaining = remainingHobbies;
       const needed = HOBBIES_PER_PAGE - fromRemaining.length;
-      const fromExisting = selectRandomHobbies(
+      const fromExisting = selectHobbiesWithPriority(
         filteredHobbies.filter((h) => !remainingHobbies.some((r) => r.id === h.id)),
-        needed
+        needed,
+        preferOutdoor
       );
       setDisplayedHobbies([...fromRemaining, ...fromExisting]);
     } else {
       // 全て表示済みの場合はシャッフルして再表示
-      setDisplayedHobbies(selectRandomHobbies(filteredHobbies, HOBBIES_PER_PAGE));
+      setDisplayedHobbies(
+        selectHobbiesWithPriority(filteredHobbies, HOBBIES_PER_PAGE, preferOutdoor)
+      );
     }
-  }, [filteredHobbies, displayedHobbies]);
+  }, [filteredHobbies, displayedHobbies, answers]);
 
   // 2列グリッド用にデータを分割
   const leftColumnData = displayedHobbies.filter((_, index) => index % 2 === 0);
@@ -189,7 +200,7 @@ export default function ResultsScreen() {
   // 空状態
   if (!answers || filteredHobbies.length === 0) {
     return (
-      <SContainer>
+      <SContainer style={{ paddingTop: insets.top + 16 }}>
         <SHeader>
           <SHeaderText>🌱 今日のおすすめ</SHeaderText>
         </SHeader>
@@ -211,7 +222,7 @@ export default function ResultsScreen() {
   const showMoreButton = filteredHobbies.length > HOBBIES_PER_PAGE;
 
   return (
-    <SContainer>
+    <SContainer style={{ paddingTop: insets.top + 16 }}>
       <SHeader>
         <SHeaderText>🌱 今日のおすすめ</SHeaderText>
       </SHeader>

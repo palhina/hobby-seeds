@@ -8,6 +8,8 @@
 import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
+import { DiagnosisHeader } from '@/components/features/diagnosis/DiagnosisHeader';
+
 // ===================
 // Styled Components
 // ===================
@@ -22,6 +24,7 @@ const SContent = styled.View`
   justify-content: center;
   align-items: center;
   padding: ${({ theme }) => theme.spacing.xl}px;
+  padding-top: ${({ theme }) => theme.spacing.xxl}px;
 `;
 
 const SEmoji = styled.Text`
@@ -71,6 +74,7 @@ export default function DiagnosisStartScreen() {
 
   return (
     <SContainer>
+      <DiagnosisHeader showBackButton={false} />
       <SContent>
         <SEmoji>🌱</SEmoji>
         <STitle>今日はどんな気分？</STitle>

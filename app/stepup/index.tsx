@@ -101,6 +101,23 @@ const SProgressFill = styled.View<SProgressFillProps>`
   background-color: ${({ theme }) => theme.colors.primary};
 `;
 
+const SIntroSection = styled.View`
+  margin-bottom: ${({ theme }) => theme.spacing.xl}px;
+`;
+
+const SIntroTitle = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  margin-bottom: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const SIntroText = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  line-height: ${({ theme }) => theme.typography.fontSize.md * 1.6}px;
+`;
+
 // ===================
 // Component
 // ===================
@@ -215,6 +232,22 @@ export default function StepUpScreen() {
     );
   }
 
+  // ヘッダーコンポーネント
+  const ListHeader = () => (
+    <>
+      {showBanner && <UnlockBanner />}
+      <SIntroSection>
+        <SIntroTitle>🚀 次のステップへ</SIntroTitle>
+        <SIntroText>
+          ゆる趣味を楽しんでくれてありがとう！{'\n'}
+          もし「もう少し深めてみたいな」と思ったら、{'\n'}
+          こちらの趣味にチャレンジしてみませんか？{'\n'}
+          無理せず、気になったときだけでOKです。
+        </SIntroText>
+      </SIntroSection>
+    </>
+  );
+
   // マッチング結果を表示
   return (
     <SContainer>
@@ -230,7 +263,7 @@ export default function StepUpScreen() {
         )}
         keyExtractor={(item) => item.hobby.id.toString()}
         contentContainerStyle={{ padding: 16 }}
-        ListHeaderComponent={showBanner ? <UnlockBanner /> : null}
+        ListHeaderComponent={<ListHeader />}
       />
     </SContainer>
   );

@@ -156,7 +156,7 @@ export function StepUpDetail({ hobby }: StepUpDetailProps) {
               <SInfoValue>{hobby.startCost}</SInfoValue>
             </SInfoCard>
             <SInfoCard>
-              <SInfoLabel>時間コミット</SInfoLabel>
+              <SInfoLabel>かかる時間</SInfoLabel>
               <SInfoValue>{hobby.timeCommit}</SInfoValue>
             </SInfoCard>
           </SInfoRow>

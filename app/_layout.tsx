@@ -21,6 +21,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="diagnosis" options={{ headerShown: false }} />
           <Stack.Screen name="results" options={{ headerShown: false }} />
+          <Stack.Screen name="stepup" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         </Stack>
         <StatusBar style="auto" />

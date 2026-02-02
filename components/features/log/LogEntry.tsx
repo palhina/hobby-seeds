@@ -6,7 +6,11 @@
  */
 
 import React from 'react';
+import { Alert } from 'react-native';
 import styled from 'styled-components/native';
+
+import { IconSymbol } from '@/components/ui/icon-symbol';
+import { theme } from '@/constants/theme';
 
 import type { HobbyLogEntry, Rating } from '@/types';
 
@@ -75,6 +79,20 @@ const SRatingEmoji = styled.Text<SRatingEmojiProps>`
   border-radius: ${({ theme }) => theme.borderRadius.sm}px;
 `;
 
+const SRightSection = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const SDeleteButton = styled.Pressable`
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+`;
+
 // ===================
 // Component
 // ===================
@@ -83,6 +101,7 @@ type LogEntryProps = {
   entry: HobbyLogEntry;
   hobbyName: string;
   hobbyEmoji: string;
+  onDelete?: () => void;
 };
 
 /**
@@ -119,7 +138,22 @@ function formatDateTime(isoString: string): string {
   }
 }
 
-export function LogEntry({ entry, hobbyName, hobbyEmoji }: LogEntryProps) {
+export function LogEntry({ entry, hobbyName, hobbyEmoji, onDelete }: LogEntryProps) {
+  const handleDeletePress = () => {
+    Alert.alert(
+      '記録を削除',
+      `「${hobbyName}」の記録を削除しますか？`,
+      [
+        { text: 'キャンセル', style: 'cancel' },
+        {
+          text: '削除',
+          style: 'destructive',
+          onPress: onDelete,
+        },
+      ]
+    );
+  };
+
   return (
     <SContainer>
       <SLeftSection>
@@ -129,9 +163,16 @@ export function LogEntry({ entry, hobbyName, hobbyEmoji }: LogEntryProps) {
           <SDateTime>{formatDateTime(entry.loggedAt)}</SDateTime>
         </SInfoSection>
       </SLeftSection>
-      <SRatingEmoji rating={entry.rating}>
-        {getRatingEmoji(entry.rating)}
-      </SRatingEmoji>
+      <SRightSection>
+        <SRatingEmoji rating={entry.rating}>
+          {getRatingEmoji(entry.rating)}
+        </SRatingEmoji>
+        {onDelete && (
+          <SDeleteButton onPress={handleDeletePress}>
+            <IconSymbol name="trash" size={18} color={theme.colors.textMuted} />
+          </SDeleteButton>
+        )}
+      </SRightSection>
     </SContainer>
   );
 }
