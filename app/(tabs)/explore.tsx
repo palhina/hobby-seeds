@@ -1,112 +1,192 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+/**
+ * 探索画面
+ *
+ * 趣味をカテゴリ別・タグ別で探せる画面
+ */
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+import React, { useState, useMemo } from 'react';
+import { FlatList, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
+import styled from 'styled-components/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default function TabTwoScreen() {
+import { HobbyCard } from '@/components/features/hobby/HobbyCard';
+import hobbiesData from '@/data/hobbies.json';
+
+import type { YuruHobby, Category } from '@/types';
+
+// ===================
+// Constants
+// ===================
+
+const EXPLORE_CATEGORIES: { value: Category | 'all'; label: string; emoji: string }[] = [
+  { value: 'all', label: 'すべて', emoji: '🌈' },
+  { value: '眺める', label: '眺める', emoji: '👀' },
+  { value: '聴く', label: '聴く', emoji: '🎧' },
+  { value: '作る', label: '作る', emoji: '✨' },
+  { value: '動く', label: '動く', emoji: '🏃' },
+  { value: '学ぶ', label: '学ぶ', emoji: '📚' },
+  { value: '整える', label: '整える', emoji: '🧹' },
+  { value: '遊ぶ', label: '遊ぶ', emoji: '🎮' },
+];
+
+// ===================
+// Styled Components
+// ===================
+
+const SContainer = styled.View`
+  flex: 1;
+  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const SHeader = styled.View`
+  padding: ${({ theme }) => theme.spacing.lg}px;
+  padding-top: ${({ theme }) => theme.spacing.xl}px;
+  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const SHeaderTitle = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.textPrimary};
+`;
+
+const SHeaderSubtitle = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  margin-top: ${({ theme }) => theme.spacing.xs}px;
+`;
+
+const SCategoryScroll = styled(ScrollView)`
+  max-height: 40px;
+  padding-horizontal: ${({ theme }) => theme.spacing.lg}px;
+  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+`;
+
+const SCategoryButton = styled.Pressable<{ selected: boolean }>`
+  background-color: ${({ theme, selected }) =>
+    selected ? theme.colors.primary : theme.colors.surface};
+  padding: ${({ theme }) => theme.spacing.xs}px ${({ theme }) => theme.spacing.md}px;
+  border-radius: ${({ theme }) => theme.borderRadius.full}px;
+  margin-right: ${({ theme }) => theme.spacing.sm}px;
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs}px;
+`;
+
+const SCategoryEmoji = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
+`;
+
+const SCategoryLabel = styled.Text<{ selected: boolean }>`
+  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
+  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
+  color: ${({ selected }) => (selected ? '#FFFFFF' : '#4A3728')};
+`;
+
+const SListContainer = styled.View`
+  flex: 1;
+  padding-horizontal: ${({ theme }) => theme.spacing.lg}px;
+`;
+
+const SResultCount = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+`;
+
+const SEmptyContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding: ${({ theme }) => theme.spacing.xxl}px;
+`;
+
+const SEmptyEmoji = styled.Text`
+  font-size: 64px;
+  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
+`;
+
+const SEmptyText = styled.Text`
+  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  text-align: center;
+`;
+
+// ===================
+// Component
+// ===================
+
+export default function ExploreScreen() {
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const [selectedCategory, setSelectedCategory] = useState<Category | 'all'>('all');
+
+  // カテゴリでフィルタリング
+  const filteredHobbies = useMemo(() => {
+    const hobbies = hobbiesData as YuruHobby[];
+    if (selectedCategory === 'all') {
+      return hobbies;
+    }
+    return hobbies.filter((hobby) => hobby.category === selectedCategory);
+  }, [selectedCategory]);
+
+  const handleHobbyPress = (id: number) => {
+    router.push(`/results/${id}`);
+  };
+
+  const renderHobbyItem = ({ item }: { item: YuruHobby }) => (
+    <HobbyCard hobby={item} onPress={handleHobbyPress} />
+  );
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <SContainer style={{ paddingTop: insets.top }}>
+      <SHeader>
+        <SHeaderTitle>🔍 趣味をさがす</SHeaderTitle>
+        <SHeaderSubtitle>カテゴリから気になる趣味を見つけよう</SHeaderSubtitle>
+      </SHeader>
+
+      {/* カテゴリフィルター */}
+      <SCategoryScroll
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingRight: 16 }}
+      >
+        {EXPLORE_CATEGORIES.map((category) => (
+          <SCategoryButton
+            key={category.value}
+            selected={selectedCategory === category.value}
+            onPress={() => setSelectedCategory(category.value)}
+          >
+            <SCategoryEmoji>{category.emoji}</SCategoryEmoji>
+            <SCategoryLabel selected={selectedCategory === category.value}>
+              {category.label}
+            </SCategoryLabel>
+          </SCategoryButton>
+        ))}
+      </SCategoryScroll>
+
+      {/* 趣味一覧 */}
+      <SListContainer>
+        <SResultCount>
+          {filteredHobbies.length}件の趣味
+        </SResultCount>
+
+        {filteredHobbies.length > 0 ? (
+          <FlatList
+            data={filteredHobbies}
+            renderItem={renderHobbyItem}
+            keyExtractor={(item) => item.id.toString()}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          />
+        ) : (
+          <SEmptyContainer>
+            <SEmptyEmoji>🤔</SEmptyEmoji>
+            <SEmptyText>このカテゴリには趣味がありません</SEmptyText>
+          </SEmptyContainer>
+        )}
+      </SListContainer>
+    </SContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-});

@@ -5,7 +5,7 @@
 ユーザーが「やってみた」趣味を記録する機能を実装する。
 評価（😐🙂😊）と一緒にAsyncStorageに保存し、履歴を閲覧できるようにする。
 
-## ステータス: 🔴 未着手
+## ステータス: 🟢 完了
 
 ## 依存関係
 
@@ -35,38 +35,38 @@ components/
 ## TODO
 
 ### hooks/use-hobby-log.ts
-- [ ] useHobbyLog フック
-  - [ ] ログの読み込み（loadLog）
-  - [ ] ログの追加（addEntry）
-  - [ ] greatCount の更新
-  - [ ] topTags の更新（オプション、008で実装）
-- [ ] HobbyLog 型の初期値定義
-- [ ] useAsyncStorage との連携
+- [x] useHobbyLog フック
+  - [x] ログの読み込み（loadLog）
+  - [x] ログの追加（addEntry）
+  - [x] greatCount の更新
+  - [x] topTags の更新（オプション、008で実装）
+- [x] HobbyLog 型の初期値定義
+- [x] useAsyncStorage との連携
 
 ### app/(tabs)/log.tsx
-- [ ] ログ一覧の表示
-- [ ] FlatList での効率的なレンダリング
-- [ ] 空状態の表示
-- [ ] 統計サマリー表示
+- [x] ログ一覧の表示
+- [x] FlatList での効率的なレンダリング
+- [x] 空状態の表示
+- [x] 統計サマリー表示
 
 ### app/(tabs)/_layout.tsx
-- [ ] ログタブの追加
-- [ ] アイコン設定（📝 など）
+- [x] ログタブの追加
+- [x] アイコン設定（📝 など）
 
 ### components/features/log/LogEntry.tsx
-- [ ] 趣味名・絵文字表示
-- [ ] 評価アイコン表示
-- [ ] 日時表示
-- [ ] カードスタイル
+- [x] 趣味名・絵文字表示
+- [x] 評価アイコン表示
+- [x] 日時表示
+- [x] カードスタイル
 
 ### components/features/log/EmptyLogState.tsx
-- [ ] やさしいメッセージ表示
-- [ ] 「診断を始める」ボタン
+- [x] やさしいメッセージ表示
+- [x] 「診断を始める」ボタン
 
 ### components/features/log/LogStats.tsx
-- [ ] 総ログ数
-- [ ] 😊 の数
-- [ ] ステップアップ解放までの数
+- [x] 総ログ数
+- [x] 😊 の数
+- [x] ステップアップ解放までの数
 
 ---
 
@@ -201,13 +201,13 @@ export function useHobbyLog() {
 
 ## 完了条件
 
-- [ ] ログの保存・読み込みが動作する
-- [ ] ログ一覧画面が表示される
-- [ ] 空状態が適切に表示される
-- [ ] greatCount が正しくカウントされる
-- [ ] タブナビゲーションに追加されている
-- [ ] styled-componentsでテーマから値を参照している
-- [ ] `npx tsc --noEmit` でエラーがないこと
+- [x] ログの保存・読み込みが動作する
+- [x] ログ一覧画面が表示される
+- [x] 空状態が適切に表示される
+- [x] greatCount が正しくカウントされる
+- [x] タブナビゲーションに追加されている
+- [x] styled-componentsでテーマから値を参照している
+- [x] `npx tsc --noEmit` でエラーがないこと
 
 ---
 

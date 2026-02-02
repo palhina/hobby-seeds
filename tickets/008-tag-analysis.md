@@ -5,7 +5,7 @@
 ユーザーのログから傾向を分析し、よく評価されているタグを抽出するユーティリティを実装する。
 分析結果はステップアップ提案や、より適切な趣味提案に活用。
 
-## ステータス: 🔴 未着手
+## ステータス: 🟢 完了
 
 ## 依存関係
 
@@ -24,18 +24,18 @@ utils/
 ## TODO
 
 ### utils/analyze-tags.ts
-- [ ] analyzeUserTags 関数
-  - [ ] ログエントリーからタグを集計
-  - [ ] 評価ごとの重み付け（great: 3, good: 2, meh: 1）
-  - [ ] 上位N個のタグを抽出
-- [ ] getTagFrequency 関数
-  - [ ] タグの出現頻度をカウント
-- [ ] calculateTagScore 関数
-  - [ ] 重み付けスコアの計算
+- [x] analyzeUserTags 関数
+  - [x] ログエントリーからタグを集計
+  - [x] 評価ごとの重み付け（great: 3, good: 2, meh: 1）
+  - [x] 上位N個のタグを抽出
+- [x] getTagFrequency 関数
+  - [x] タグの出現頻度をカウント
+- [x] calculateTagScore 関数
+  - [x] 重み付けスコアの計算
 
 ### hooks/use-hobby-log.ts の更新
-- [ ] ログ更新時に topTags を再計算
-- [ ] analyzeUserTags との連携
+- [x] ログ更新時に topTags を再計算
+- [x] analyzeUserTags との連携
 
 ---
 
@@ -205,10 +205,10 @@ describe('analyzeUserTags', () => {
 
 ## 完了条件
 
-- [ ] analyzeUserTags 関数が正しく動作する
-- [ ] 重み付けスコアが正しく計算される
-- [ ] useHobbyLog と連携している
-- [ ] `npx tsc --noEmit` でエラーがないこと
+- [x] analyzeUserTags 関数が正しく動作する
+- [x] 重み付けスコアが正しく計算される
+- [x] useHobbyLog と連携している
+- [x] `npx tsc --noEmit` でエラーがないこと
 
 ---
 

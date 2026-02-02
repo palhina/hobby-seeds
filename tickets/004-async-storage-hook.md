@@ -5,7 +5,7 @@
 AsyncStorageを型安全に使用するためのカスタムフック `useAsyncStorage` を作成する。
 ストレージキーの定数も合わせて定義する。
 
-## ステータス: 🔴 未着手
+## ステータス: 🟢 完了
 
 ## 依存関係
 
@@ -27,19 +27,20 @@ hooks/
 ## TODO
 
 ### constants/storage-keys.ts
-- [ ] STORAGE_KEYS オブジェクト定義
-  - [ ] HOBBY_LOG: '@hobby-seeds/hobby-log'
-  - [ ] DIAGNOSIS_HISTORY: '@hobby-seeds/diagnosis-history'
-  - [ ] PREFERENCES: '@hobby-seeds/preferences'
-  - [ ] FIRST_LAUNCH: '@hobby-seeds/first-launch'
-- [ ] StorageKey 型のエクスポート
+- [x] STORAGE_KEYS オブジェクト定義
+  - [x] HOBBY_LOG: '@hobby-seeds/hobby-log'
+  - [x] DIAGNOSIS_HISTORY: '@hobby-seeds/diagnosis-history'
+  - [x] PREFERENCES: '@hobby-seeds/preferences'
+  - [x] FIRST_LAUNCH: '@hobby-seeds/first-launch'
+  - [x] STEPUP_UNLOCKED: '@hobby-seeds/stepup-unlocked'
+- [x] StorageKey 型のエクスポート
 
 ### hooks/use-async-storage.ts
-- [ ] useAsyncStorage<T> ジェネリックフック
-- [ ] getItem 関数（null返却でエラーハンドリング）
-- [ ] setItem 関数（boolean返却でエラーハンドリング）
-- [ ] removeItem 関数（オプション）
-- [ ] __DEV__ での console.error ログ
+- [x] useAsyncStorage<T> ジェネリックフック
+- [x] getItem 関数（null返却でエラーハンドリング）
+- [x] setItem 関数（boolean返却でエラーハンドリング）
+- [x] removeItem 関数
+- [x] __DEV__ での console.error ログ
 
 ---
 
@@ -139,11 +140,11 @@ function useHobbyLog() {
 
 ## 完了条件
 
-- [ ] STORAGE_KEYS が定義されている
-- [ ] useAsyncStorage フックが実装されている
-- [ ] ジェネリクスで型安全にデータ取得/保存できる
-- [ ] エラーハンドリングが適切に行われている
-- [ ] `npx tsc --noEmit` でエラーがないこと
+- [x] STORAGE_KEYS が定義されている
+- [x] useAsyncStorage フックが実装されている
+- [x] ジェネリクスで型安全にデータ取得/保存できる
+- [x] エラーハンドリングが適切に行われている
+- [x] `npx tsc --noEmit` でエラーがないこと
 
 ---
 
