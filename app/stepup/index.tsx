@@ -4,20 +4,24 @@
  * マッチしたステップアップ趣味を一覧表示
  */
 
-import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
-import { useRouter } from 'expo-router';
-import styled from 'styled-components/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { FlatList } from "react-native";
+import styled from "styled-components/native";
 
-import { matchStepUpHobbies, isStepUpUnlocked, getRemainingToUnlock } from '@/utils/match-stepup';
-import { StepUpCard, UnlockBanner } from '@/components/features/stepup';
+import { StepUpCard, UnlockBanner } from "@/components/features/stepup";
+import {
+  getRemainingToUnlock,
+  isStepUpUnlocked,
+  matchStepUpHobbies,
+} from "@/utils/match-stepup";
 
-import type { StepUpHobby, HobbyLog } from '@/types';
-import type { MatchResult } from '@/utils/match-stepup';
+import type { HobbyLog, StepUpHobby } from "@/types";
+import type { MatchResult } from "@/utils/match-stepup";
 
 // データのインポート
-import stepUpHobbiesData from '@/data/stepup-hobbies.json';
+import stepUpHobbiesData from "@/data/stepup-hobbies.json";
 
 // ===================
 // Styled Components
@@ -137,7 +141,7 @@ export default function StepUpScreen() {
   const loadStepUpData = async () => {
     try {
       // AsyncStorageからログデータを取得
-      const logJson = await AsyncStorage.getItem('@hobby-seeds/hobby-log');
+      const logJson = await AsyncStorage.getItem("@hobby-seeds/hobby-log");
 
       if (!logJson) {
         setLoading(false);
@@ -158,12 +162,12 @@ export default function StepUpScreen() {
       }
 
       // 初回解放時のバナー表示判定
-      const bannerShownKey = '@hobby-seeds/stepup-banner-shown';
+      const bannerShownKey = "@hobby-seeds/stepup-banner-shown";
       const bannerShown = await AsyncStorage.getItem(bannerShownKey);
 
       if (!bannerShown) {
         setShowBanner(true);
-        await AsyncStorage.setItem(bannerShownKey, 'true');
+        await AsyncStorage.setItem(bannerShownKey, "true");
       }
 
       // マッチング処理
@@ -173,7 +177,7 @@ export default function StepUpScreen() {
       setMatchedHobbies(matches);
     } catch (error) {
       if (__DEV__) {
-        console.error('Failed to load step-up data:', error);
+        console.error("Failed to load step-up data:", error);
       }
     } finally {
       setLoading(false);
@@ -205,7 +209,7 @@ export default function StepUpScreen() {
           <SLockedEmoji>🔒</SLockedEmoji>
           <SLockedTitle>あと{remaining}回で解放！</SLockedTitle>
           <SLockedMessage>
-            趣味を試して😊を{remaining}回記録すると{'\n'}
+            趣味を試して😊を{remaining}回記録すると{"\n"}
             ステップアップ趣味が提案されます
           </SLockedMessage>
           <SProgressBar>
@@ -224,7 +228,7 @@ export default function StepUpScreen() {
           <SEmptyEmoji>🌱</SEmptyEmoji>
           <SEmptyTitle>まだ提案できません</SEmptyTitle>
           <SEmptyMessage>
-            もう少し色々な趣味を試してみてください{'\n'}
+            もう少し色々な趣味を試してみてください{"\n"}
             あなたに合った趣味が見つかります
           </SEmptyMessage>
         </SEmptyContainer>
@@ -239,9 +243,9 @@ export default function StepUpScreen() {
       <SIntroSection>
         <SIntroTitle>🚀 次のステップへ</SIntroTitle>
         <SIntroText>
-          ゆる趣味を楽しんでくれてありがとう！{'\n'}
-          もし「もう少し深めてみたいな」と思ったら、{'\n'}
-          こちらの趣味にチャレンジしてみませんか？{'\n'}
+          ゆる趣味を楽しんでくれてありがとうございます。{"\n"}
+          もし「もう少し深めてみたいな」と思ったら、{"\n"}
+          こちらの趣味にチャレンジしてみませんか？{"\n"}
           無理せず、気になったときだけでOKです。
         </SIntroText>
       </SIntroSection>

@@ -23,6 +23,7 @@ const MAPPING = {
   'magnifyingglass': 'search',
   'xmark': 'close',
   'trash': 'delete',
+  'gearshape.fill': 'settings',
 } as IconMapping;
 
 /**
