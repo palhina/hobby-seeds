@@ -3,9 +3,33 @@ import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { IconSymbol } from '@/components/ui/icon-symbol';
+
 const SContainer = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const SHeader = styled.View`
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  padding: ${({ theme }) => theme.spacing.md}px;
+`;
+
+const SSettingsButton = styled.Pressable`
+  background-color: ${({ theme }) => theme.colors.surface};
+  width: 44px;
+  height: 44px;
+  border-radius: ${({ theme }) => theme.borderRadius.full}px;
+  align-items: center;
+  justify-content: center;
+  shadow-color: ${({ theme }) => theme.colors.shadow};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.1;
+  shadow-radius: 4px;
+  elevation: 2;
 `;
 
 const SContent = styled.View`
@@ -74,8 +98,17 @@ export default function HomeScreen() {
     router.push('/diagnosis');
   };
 
+  const handleOpenSettings = () => {
+    router.push('/settings');
+  };
+
   return (
     <SContainer style={{ paddingTop: insets.top }}>
+      <SHeader style={{ paddingTop: insets.top }}>
+        <SSettingsButton onPress={handleOpenSettings}>
+          <IconSymbol name="gearshape.fill" size={24} color="#4A3728" />
+        </SSettingsButton>
+      </SHeader>
       <SContent>
         <SEmoji>🌱</SEmoji>
         <STitle>ゆる趣味さがし</STitle>
