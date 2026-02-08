@@ -11,6 +11,13 @@ import styled from 'styled-components/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { HobbyCard } from '@/components/features/hobby/HobbyCard';
+import {
+  SScreenContainer,
+  SCenteredContent,
+  SDisplayText,
+  SSmallText,
+  SEmojiLarge,
+} from '@/components/ui/primitives';
 import hobbiesData from '@/data/hobbies.json';
 
 import type { YuruHobby, Category } from '@/types';
@@ -31,13 +38,8 @@ const EXPLORE_CATEGORIES: { value: Category | 'all'; label: string; emoji: strin
 ];
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
-
-const SContainer = styled.View`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
 
 const SHeader = styled.View`
   padding: ${({ theme }) => theme.spacing.lg}px;
@@ -45,15 +47,12 @@ const SHeader = styled.View`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-const SHeaderTitle = styled.Text`
+const SHeaderTitle = styled(SDisplayText)`
   font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  text-align: left;
 `;
 
-const SHeaderSubtitle = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+const SHeaderSubtitle = styled(SSmallText)`
   margin-top: ${({ theme }) => theme.spacing.xs}px;
 `;
 
@@ -89,27 +88,17 @@ const SListContainer = styled.View`
   padding-horizontal: ${({ theme }) => theme.spacing.lg}px;
 `;
 
-const SResultCount = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+const SResultCount = styled(SSmallText)`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-const SEmptyContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.xxl}px;
-`;
-
-const SEmptyEmoji = styled.Text`
+const SEmptyEmoji = styled(SEmojiLarge)`
   font-size: 64px;
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
-const SEmptyText = styled.Text`
+const SEmptyText = styled(SSmallText)`
   font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
   text-align: center;
 `;
 
@@ -140,7 +129,7 @@ export default function ExploreScreen() {
   );
 
   return (
-    <SContainer style={{ paddingTop: insets.top }}>
+    <SScreenContainer style={{ paddingTop: insets.top }}>
       <SHeader>
         <SHeaderTitle>🔍 趣味をさがす</SHeaderTitle>
         <SHeaderSubtitle>カテゴリから気になる趣味を見つけよう</SHeaderSubtitle>
@@ -181,12 +170,12 @@ export default function ExploreScreen() {
             contentContainerStyle={{ paddingBottom: 100 }}
           />
         ) : (
-          <SEmptyContainer>
+          <SCenteredContent>
             <SEmptyEmoji>🤔</SEmptyEmoji>
             <SEmptyText>このカテゴリには趣味がありません</SEmptyText>
-          </SEmptyContainer>
+          </SCenteredContent>
         )}
       </SListContainer>
-    </SContainer>
+    </SScreenContainer>
   );
 }

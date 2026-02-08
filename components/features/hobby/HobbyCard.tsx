@@ -8,8 +8,10 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-import type { YuruHobby } from '@/types';
+import { SCardPressable, SEmojiMedium, SLabel } from '@/components/ui/primitives';
 import { HurdleIndicator } from './HurdleIndicator';
+
+import type { YuruHobby } from '@/types';
 
 // ===================
 // Types
@@ -21,39 +23,22 @@ type HobbyCardProps = {
 };
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
 
-const SCard = styled.Pressable`
-  background-color: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.borderRadius.lg}px;
-  padding: ${({ theme }) => theme.spacing.lg}px;
+const SCard = styled(SCardPressable)`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
   height: 220px;
-
-  /* シャドウ（iOS） */
-  shadow-color: ${({ theme }) => theme.colors.shadow};
-  shadow-offset: 0px 4px;
-  shadow-opacity: 1;
-  shadow-radius: 12px;
-
-  /* シャドウ（Android） */
-  elevation: 3;
 `;
 
-const SEmoji = styled.Text`
-  font-size: 40px;
-  text-align: center;
+const SEmojiSpaced = styled(SEmojiMedium)`
   margin-bottom: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-const SName = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
+const SName = styled(SLabel)`
   font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing.sm}px;
-  number-of-lines: 2;
 `;
 
 const SHurdleContainer = styled.View`
@@ -67,8 +52,8 @@ const SHurdleContainer = styled.View`
 export function HobbyCard({ hobby, onPress }: HobbyCardProps) {
   return (
     <SCard onPress={() => onPress(hobby.id)}>
-      <SEmoji>{hobby.emoji}</SEmoji>
-      <SName>{hobby.name}</SName>
+      <SEmojiSpaced>{hobby.emoji}</SEmojiSpaced>
+      <SName numberOfLines={2}>{hobby.name}</SName>
       <SHurdleContainer>
         <HurdleIndicator
           time={hobby.time}

@@ -12,6 +12,14 @@ import styled from "styled-components/native";
 
 import { StepUpCard, UnlockBanner } from "@/components/features/stepup";
 import {
+  SScreenContainer,
+  SCenteredContent,
+  SDisplayText,
+  SBodyText,
+  SEmojiLarge,
+  STitle,
+} from "@/components/ui/primitives";
+import {
   getRemainingToUnlock,
   isStepUpUnlocked,
   matchStepUpHobbies,
@@ -24,66 +32,20 @@ import type { MatchResult } from "@/utils/match-stepup";
 import stepUpHobbiesData from "@/data/stepup-hobbies.json";
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
 
-const SContainer = styled.View`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
-
-const SEmptyContainer = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: ${({ theme }) => theme.spacing.xxl}px;
-`;
-
-const SEmptyEmoji = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.display}px;
+const SEmptyEmoji = styled(SEmojiLarge)`
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
-const SEmptyTitle = styled.Text`
+const SEmptyTitle = styled(SDisplayText)`
   font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-const SEmptyMessage = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+const SEmptyMessage = styled(SBodyText)`
   text-align: center;
-  line-height: ${({ theme }) => theme.typography.fontSize.md * 1.5}px;
-`;
-
-const SLockedContainer = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: ${({ theme }) => theme.spacing.xxl}px;
-`;
-
-const SLockedEmoji = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.display}px;
-  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
-`;
-
-const SLockedTitle = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing.md}px;
-`;
-
-const SLockedMessage = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  text-align: center;
-  line-height: ${({ theme }) => theme.typography.fontSize.md * 1.5}px;
 `;
 
 const SProgressBar = styled.View`
@@ -109,16 +71,12 @@ const SIntroSection = styled.View`
   margin-bottom: ${({ theme }) => theme.spacing.xl}px;
 `;
 
-const SIntroTitle = styled.Text`
+const SIntroTitle = styled(STitle)`
   font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
   margin-bottom: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-const SIntroText = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+const SIntroText = styled(SBodyText)`
   line-height: ${({ theme }) => theme.typography.fontSize.md * 1.6}px;
 `;
 
@@ -191,11 +149,11 @@ export default function StepUpScreen() {
   // ローディング中
   if (loading) {
     return (
-      <SContainer>
-        <SEmptyContainer>
+      <SScreenContainer>
+        <SCenteredContent>
           <SEmptyMessage>読み込み中...</SEmptyMessage>
-        </SEmptyContainer>
-      </SContainer>
+        </SCenteredContent>
+      </SScreenContainer>
     );
   }
 
@@ -204,35 +162,35 @@ export default function StepUpScreen() {
     const progress = ((3 - remaining) / 3) * 100;
 
     return (
-      <SContainer>
-        <SLockedContainer>
-          <SLockedEmoji>🔒</SLockedEmoji>
-          <SLockedTitle>あと{remaining}回で解放！</SLockedTitle>
-          <SLockedMessage>
+      <SScreenContainer>
+        <SCenteredContent>
+          <SEmptyEmoji>🔒</SEmptyEmoji>
+          <SEmptyTitle>あと{remaining}回で解放！</SEmptyTitle>
+          <SEmptyMessage>
             趣味を試して😊を{remaining}回記録すると{"\n"}
             ステップアップ趣味が提案されます
-          </SLockedMessage>
+          </SEmptyMessage>
           <SProgressBar>
             <SProgressFill progress={progress} />
           </SProgressBar>
-        </SLockedContainer>
-      </SContainer>
+        </SCenteredContent>
+      </SScreenContainer>
     );
   }
 
   // 解放済みだがマッチなし
   if (matchedHobbies.length === 0) {
     return (
-      <SContainer>
-        <SEmptyContainer>
+      <SScreenContainer>
+        <SCenteredContent>
           <SEmptyEmoji>🌱</SEmptyEmoji>
           <SEmptyTitle>まだ提案できません</SEmptyTitle>
           <SEmptyMessage>
             もう少し色々な趣味を試してみてください{"\n"}
             あなたに合った趣味が見つかります
           </SEmptyMessage>
-        </SEmptyContainer>
-      </SContainer>
+        </SCenteredContent>
+      </SScreenContainer>
     );
   }
 
@@ -254,7 +212,7 @@ export default function StepUpScreen() {
 
   // マッチング結果を表示
   return (
-    <SContainer>
+    <SScreenContainer>
       <FlatList
         data={matchedHobbies}
         renderItem={({ item }) => (
@@ -269,6 +227,6 @@ export default function StepUpScreen() {
         contentContainerStyle={{ padding: 16 }}
         ListHeaderComponent={<ListHeader />}
       />
-    </SContainer>
+    </SScreenContainer>
   );
 }

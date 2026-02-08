@@ -10,55 +10,39 @@ import { Alert } from 'react-native';
 import styled from 'styled-components/native';
 
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import {
+  SCardLight,
+  SRow,
+  SRowGap,
+  SLabel,
+  SMutedText,
+  SEmojiSmall,
+  SIconButtonSmall,
+} from '@/components/ui/primitives';
 import { theme } from '@/constants/theme';
 
 import type { HobbyLogEntry, Rating } from '@/types';
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
 
-const SContainer = styled.View`
-  background-color: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
-  padding: ${({ theme }) => theme.spacing.md}px;
-  margin-bottom: ${({ theme }) => theme.spacing.sm}px;
+const SContainer = styled(SCardLight)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
-  shadow-color: ${({ theme }) => theme.colors.shadow};
-  shadow-offset: 0px 2px;
-  shadow-opacity: 1;
-  shadow-radius: 4px;
-  elevation: 2;
 `;
 
-const SLeftSection = styled.View`
+const SLeftSection = styled(SRowGap)`
   flex: 1;
-  flex-direction: row;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.md}px;
-`;
-
-const SEmoji = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.xxl}px;
 `;
 
 const SInfoSection = styled.View`
   flex: 1;
 `;
 
-const SHobbyName = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.textPrimary};
+const SHobbyName = styled(SLabel)`
   margin-bottom: ${({ theme }) => theme.spacing.xs}px;
-`;
-
-const SDateTime = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.xs}px;
-  color: ${({ theme }) => theme.colors.textMuted};
 `;
 
 type SRatingEmojiProps = {
@@ -79,30 +63,13 @@ const SRatingEmoji = styled.Text<SRatingEmojiProps>`
   border-radius: ${({ theme }) => theme.borderRadius.sm}px;
 `;
 
-const SRightSection = styled.View`
-  flex-direction: row;
-  align-items: center;
+const SRightSection = styled(SRow)`
   gap: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-const SDeleteButton = styled.Pressable`
-  width: 32px;
-  height: 32px;
-  justify-content: center;
-  align-items: center;
-  opacity: 0.5;
-`;
-
 // ===================
-// Component
+// Helpers
 // ===================
-
-type LogEntryProps = {
-  entry: HobbyLogEntry;
-  hobbyName: string;
-  hobbyEmoji: string;
-  onDelete?: () => void;
-};
 
 /**
  * 評価から絵文字を取得
@@ -138,6 +105,17 @@ function formatDateTime(isoString: string): string {
   }
 }
 
+// ===================
+// Component
+// ===================
+
+type LogEntryProps = {
+  entry: HobbyLogEntry;
+  hobbyName: string;
+  hobbyEmoji: string;
+  onDelete?: () => void;
+};
+
 export function LogEntry({ entry, hobbyName, hobbyEmoji, onDelete }: LogEntryProps) {
   const handleDeletePress = () => {
     Alert.alert(
@@ -157,10 +135,10 @@ export function LogEntry({ entry, hobbyName, hobbyEmoji, onDelete }: LogEntryPro
   return (
     <SContainer>
       <SLeftSection>
-        <SEmoji>{hobbyEmoji}</SEmoji>
+        <SEmojiSmall>{hobbyEmoji}</SEmojiSmall>
         <SInfoSection>
           <SHobbyName>{hobbyName}</SHobbyName>
-          <SDateTime>{formatDateTime(entry.loggedAt)}</SDateTime>
+          <SMutedText>{formatDateTime(entry.loggedAt)}</SMutedText>
         </SInfoSection>
       </SLeftSection>
       <SRightSection>
@@ -168,9 +146,9 @@ export function LogEntry({ entry, hobbyName, hobbyEmoji, onDelete }: LogEntryPro
           {getRatingEmoji(entry.rating)}
         </SRatingEmoji>
         {onDelete && (
-          <SDeleteButton onPress={handleDeletePress}>
+          <SIconButtonSmall onPress={handleDeletePress}>
             <IconSymbol name="trash" size={18} color={theme.colors.textMuted} />
-          </SDeleteButton>
+          </SIconButtonSmall>
         )}
       </SRightSection>
     </SContainer>

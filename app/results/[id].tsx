@@ -11,26 +11,39 @@ import styled from 'styled-components/native';
 
 import { HurdleIndicator } from '@/components/features/hobby/HurdleIndicator';
 import { RatingButtons } from '@/components/features/hobby/RatingButtons';
+import {
+  SSafeContainer,
+  SContent,
+  SCenteredContent,
+  SCard,
+  STagsContainer,
+  STag,
+  STagText,
+  SPrimaryButton,
+  SPrimaryButtonText,
+  SSecondaryButton,
+  SSecondaryButtonText,
+  STitle,
+  SBodyText,
+  STitleCentered,
+  SEmojiLarge,
+  SDisplayText,
+  SMutedText,
+} from '@/components/ui/primitives';
 import { useHobbyLog } from '@/hooks/use-hobby-log';
 import hobbiesData from '@/data/hobbies.json';
 
 import type { YuruHobby, Rating } from '@/types';
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
-
-const SContainer = styled.SafeAreaView`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
 
 const SScrollView = styled(ScrollView)`
   flex: 1;
 `;
 
-const SContent = styled.View`
-  padding: ${({ theme }) => theme.spacing.xl}px;
+const SContentPadded = styled(SContent)`
   padding-top: ${({ theme }) => theme.spacing.xxl}px;
 `;
 
@@ -39,16 +52,11 @@ const SHeader = styled.View`
   margin-bottom: ${({ theme }) => theme.spacing.xl}px;
 `;
 
-const SEmoji = styled.Text`
-  font-size: 80px;
+const SEmojiSpaced = styled(SEmojiLarge)`
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
-const SName = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.xxl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  text-align: center;
+const SName = styled(SDisplayText)`
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
@@ -56,82 +64,25 @@ const SHurdleContainer = styled.View`
   margin-bottom: ${({ theme }) => theme.spacing.xl}px;
 `;
 
-const STryStepCard = styled.View`
-  background-color: ${({ theme }) => theme.colors.surface};
-  padding: ${({ theme }) => theme.spacing.lg}px;
-  border-radius: ${({ theme }) => theme.borderRadius.lg}px;
+const STryStepCard = styled(SCard)`
   margin-bottom: ${({ theme }) => theme.spacing.xl}px;
-
-  /* シャドウ（iOS） */
-  shadow-color: ${({ theme }) => theme.colors.shadow};
-  shadow-offset: 0px 4px;
-  shadow-opacity: 1;
-  shadow-radius: 12px;
-
-  /* シャドウ（Android） */
-  elevation: 3;
 `;
 
-const STryStepTitle = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
+const STryStepTitle = styled(STitle)`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-const STryStepText = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: ${({ theme }) => theme.typography.fontSize.md * theme.typography.lineHeight.relaxed}px;
-`;
-
-const STagsContainer = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.sm}px;
+const STagsSpaced = styled(STagsContainer)`
   margin-bottom: ${({ theme }) => theme.spacing.xxl}px;
 `;
 
-const STag = styled.View`
-  background-color: ${({ theme }) => theme.colors.primaryLight};
-  padding: ${({ theme }) => `${theme.spacing.xs}px ${theme.spacing.md}px`};
-  border-radius: ${({ theme }) => theme.borderRadius.full}px;
-`;
-
-const STagText = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-`;
-
-const SButtonContainer = styled.View`
-  gap: ${({ theme }) => theme.spacing.md}px;
-  padding-bottom: ${({ theme }) => theme.spacing.xl}px;
-`;
-
-const SRatingSection = styled.View`
-  background-color: ${({ theme }) => theme.colors.surface};
-  padding: ${({ theme }) => theme.spacing.lg}px;
-  border-radius: ${({ theme }) => theme.borderRadius.lg}px;
+const SRatingSection = styled(SCard)`
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
   align-items: center;
-
-  /* シャドウ（iOS） */
-  shadow-color: ${({ theme }) => theme.colors.shadow};
-  shadow-offset: 0px 4px;
-  shadow-opacity: 1;
-  shadow-radius: 12px;
-
-  /* シャドウ（Android） */
-  elevation: 3;
 `;
 
-const SRatingTitle = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
+const SRatingTitle = styled(STitleCentered)`
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
-  text-align: center;
 `;
 
 const SSuccessMessage = styled.View`
@@ -182,41 +133,9 @@ const SSuccessText = styled.Text`
   text-align: center;
 `;
 
-const SPrimaryButton = styled.TouchableOpacity`
-  background-color: ${({ theme }) => theme.colors.primary};
-  padding-vertical: ${({ theme }) => theme.spacing.md}px;
-  padding-horizontal: ${({ theme }) => theme.spacing.xl}px;
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
-  align-items: center;
-`;
-
-const SSecondaryButton = styled.TouchableOpacity`
-  background-color: ${({ theme }) => theme.colors.surface};
-  padding-vertical: ${({ theme }) => theme.spacing.md}px;
-  padding-horizontal: ${({ theme }) => theme.spacing.xl}px;
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
-  align-items: center;
-  border-width: 2px;
-  border-color: ${({ theme }) => theme.colors.border};
-`;
-
-const SPrimaryButtonText = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  color: #FFFFFF;
-`;
-
-const SSecondaryButtonText = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.textPrimary};
-`;
-
-const SErrorContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.xl}px;
+const SButtonContainer = styled.View`
+  gap: ${({ theme }) => theme.spacing.md}px;
+  padding-bottom: ${({ theme }) => theme.spacing.xl}px;
 `;
 
 const SErrorEmoji = styled.Text`
@@ -224,9 +143,8 @@ const SErrorEmoji = styled.Text`
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
-const SErrorText = styled.Text`
+const SErrorText = styled(SMutedText)`
   font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing.xl}px;
 `;
@@ -290,7 +208,7 @@ export default function HobbyDetailScreen() {
       // 常に記録画面へ遷移（ステップアップへの自動遷移は廃止）
       setTimeout(() => {
         router.push('/(tabs)/log');
-      }, isFirstStepUpUnlock ? 2500 : 1500);
+      }, 1500);
     }
   };
 
@@ -300,8 +218,8 @@ export default function HobbyDetailScreen() {
 
   if (!hobby) {
     return (
-      <SContainer>
-        <SErrorContainer>
+      <SSafeContainer>
+        <SCenteredContent>
           <SErrorEmoji>😅</SErrorEmoji>
           <SErrorText>
             趣味が見つかりませんでした。
@@ -309,17 +227,17 @@ export default function HobbyDetailScreen() {
           <SSecondaryButton onPress={handleBack} activeOpacity={0.8}>
             <SSecondaryButtonText>戻る</SSecondaryButtonText>
           </SSecondaryButton>
-        </SErrorContainer>
-      </SContainer>
+        </SCenteredContent>
+      </SSafeContainer>
     );
   }
 
   return (
-    <SContainer>
+    <SSafeContainer>
       <SScrollView showsVerticalScrollIndicator={false}>
-        <SContent>
+        <SContentPadded>
           <SHeader>
-            <SEmoji>{hobby.emoji}</SEmoji>
+            <SEmojiSpaced>{hobby.emoji}</SEmojiSpaced>
             <SName>{hobby.name}</SName>
           </SHeader>
 
@@ -333,16 +251,16 @@ export default function HobbyDetailScreen() {
 
           <STryStepCard>
             <STryStepTitle>🌱 最初の一歩</STryStepTitle>
-            <STryStepText>{hobby.tryStep}</STryStepText>
+            <SBodyText>{hobby.tryStep}</SBodyText>
           </STryStepCard>
 
-          <STagsContainer>
+          <STagsSpaced>
             {hobby.tags.map((tag, index) => (
               <STag key={`${tag}-${index}`}>
                 <STagText>#{tag}</STagText>
               </STag>
             ))}
-          </STagsContainer>
+          </STagsSpaced>
 
           {/* ステップアップ解放メッセージ */}
           {isSaved && isFirstUnlock && (
@@ -382,12 +300,14 @@ export default function HobbyDetailScreen() {
               </SPrimaryButton>
             )}
 
-            <SSecondaryButton onPress={handleBack} activeOpacity={0.8}>
-              <SSecondaryButtonText>戻る</SSecondaryButtonText>
-            </SSecondaryButton>
+            {!isSaved && (
+              <SSecondaryButton onPress={handleBack} activeOpacity={0.8}>
+                <SSecondaryButtonText>戻る</SSecondaryButtonText>
+              </SSecondaryButton>
+            )}
           </SButtonContainer>
-        </SContent>
+        </SContentPadded>
       </SScrollView>
-    </SContainer>
+    </SSafeContainer>
   );
 }

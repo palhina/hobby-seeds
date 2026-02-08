@@ -10,10 +10,18 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
+import {
+  SRowBetween,
+  STitle,
+  SSmallText,
+  SLabel,
+  STagsContainerCompact,
+} from '@/components/ui/primitives';
+
 import type { Tag } from '@/types';
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
 
 const SContainer = styled.View`
@@ -23,35 +31,12 @@ const SContainer = styled.View`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-const STitle = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
+const STitleSpaced = styled(STitle)`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-const SStatsRow = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
+const SStatsRow = styled(SRowBetween)`
   margin-bottom: ${({ theme }) => theme.spacing.sm}px;
-`;
-
-const SStatLabel = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-`;
-
-const SStatValue = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.textPrimary};
-`;
-
-const STagsContainer = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: ${({ theme }) => theme.spacing.xs}px;
-  margin-top: ${({ theme }) => theme.spacing.sm}px;
 `;
 
 const STag = styled.View`
@@ -72,6 +57,10 @@ const SDivider = styled.View`
   margin: ${({ theme }) => theme.spacing.md}px 0;
 `;
 
+const STagsSpaced = styled(STagsContainerCompact)`
+  margin-top: ${({ theme }) => theme.spacing.sm}px;
+`;
+
 // ===================
 // Component
 // ===================
@@ -85,29 +74,29 @@ type LogStatsProps = {
 export function LogStats({ totalCount, greatCount, topTags }: LogStatsProps) {
   return (
     <SContainer>
-      <STitle>📊 あなたの記録</STitle>
+      <STitleSpaced>📊 あなたの記録</STitleSpaced>
 
       <SStatsRow>
-        <SStatLabel>試した趣味</SStatLabel>
-        <SStatValue>{totalCount}回</SStatValue>
+        <SSmallText>試した趣味</SSmallText>
+        <SLabel>{totalCount}回</SLabel>
       </SStatsRow>
 
       <SStatsRow>
-        <SStatLabel>😊（楽しかった！）</SStatLabel>
-        <SStatValue>{greatCount}回</SStatValue>
+        <SSmallText>😊（楽しかった！）</SSmallText>
+        <SLabel>{greatCount}回</SLabel>
       </SStatsRow>
 
       {topTags.length > 0 && (
         <>
           <SDivider />
-          <SStatLabel>よく試している趣味のタイプ</SStatLabel>
-          <STagsContainer>
+          <SSmallText>よく試している趣味のタイプ</SSmallText>
+          <STagsSpaced>
             {topTags.map((tag, index) => (
               <STag key={`${tag}-${index}`}>
                 <STagText>#{tag}</STagText>
               </STag>
             ))}
-          </STagsContainer>
+          </STagsSpaced>
         </>
       )}
     </SContainer>

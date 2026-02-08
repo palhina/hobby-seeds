@@ -7,6 +7,23 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
+import {
+  SCardPressable,
+  SRow,
+  SRowBetween,
+  SSectionDivider,
+  STitle,
+  SBodyText,
+  SLabelSmall,
+  SValue,
+  SEmojiSmall,
+  SBadge,
+  SBadgeText,
+  STagsContainerCompact,
+  STagSecondary,
+  STagSecondaryText,
+} from '@/components/ui/primitives';
+
 import type { StepUpHobby, Tag } from '@/types';
 
 // ===================
@@ -21,29 +38,18 @@ type StepUpCardProps = {
 };
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
 
-const SCard = styled.Pressable`
-  background-color: ${({ theme }) => theme.colors.surface};
-  border-radius: ${({ theme }) => theme.borderRadius.lg}px;
-  padding: ${({ theme }) => theme.spacing.lg}px;
-  margin-bottom: ${({ theme }) => theme.spacing.md}px;
-  shadow-color: ${({ theme }) => theme.colors.shadow};
-  shadow-offset: 0px 4px;
-  shadow-opacity: 1;
-  shadow-radius: 12px;
-  elevation: 3;
-`;
-
-const SHeader = styled.View`
-  flex-direction: row;
-  align-items: center;
+const SCard = styled(SCardPressable)`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-const SEmoji = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.xxl}px;
+const SHeader = styled(SRow)`
+  margin-bottom: ${({ theme }) => theme.spacing.md}px;
+`;
+
+const SEmojiSpaced = styled(SEmojiSmall)`
   margin-right: ${({ theme }) => theme.spacing.md}px;
 `;
 
@@ -51,75 +57,22 @@ const STitleContainer = styled.View`
   flex: 1;
 `;
 
-const SName = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
+const SName = styled(STitle)`
   margin-bottom: ${({ theme }) => theme.spacing.xs}px;
 `;
 
-const SDescription = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: ${({ theme }) => theme.typography.fontSize.sm * theme.typography.lineHeight.relaxed}px;
+const SDescription = styled(SBodyText)`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-const SMatchBadge = styled.View`
-  background-color: ${({ theme }) => theme.colors.primaryLight};
-  border-radius: ${({ theme }) => theme.borderRadius.full}px;
-  padding: ${({ theme }) => theme.spacing.xs}px ${({ theme }) => theme.spacing.md}px;
-  align-self: flex-start;
-`;
-
-const SMatchText = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.xs}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.primary};
-`;
-
-const STagsContainer = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
+const STagsSpaced = styled(STagsContainerCompact)`
   margin-top: ${({ theme }) => theme.spacing.sm}px;
-  gap: ${({ theme }) => theme.spacing.xs}px;
 `;
 
-const STag = styled.View`
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
-  border-radius: ${({ theme }) => theme.borderRadius.sm}px;
-  padding: ${({ theme }) => theme.spacing.xs}px ${({ theme }) => theme.spacing.sm}px;
-`;
+const SInfoItem = styled(SRow)``;
 
-const STagText = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.xs}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-`;
-
-const SInfoRow = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: ${({ theme }) => theme.spacing.md}px;
-  padding-top: ${({ theme }) => theme.spacing.md}px;
-  border-top-width: 1px;
-  border-top-color: ${({ theme }) => theme.colors.border};
-`;
-
-const SInfoItem = styled.View`
-  flex-direction: row;
-  align-items: center;
-`;
-
-const SInfoLabel = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.xs}px;
-  color: ${({ theme }) => theme.colors.textMuted};
+const SInfoLabel = styled(SLabelSmall)`
   margin-right: ${({ theme }) => theme.spacing.xs}px;
-`;
-
-const SInfoValue = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 // ===================
@@ -130,35 +83,35 @@ export function StepUpCard({ hobby, matchScore, matchedTags, onPress }: StepUpCa
   return (
     <SCard onPress={() => onPress(hobby.id)}>
       <SHeader>
-        <SEmoji>{hobby.emoji}</SEmoji>
+        <SEmojiSpaced>{hobby.emoji}</SEmojiSpaced>
         <STitleContainer>
           <SName>{hobby.name}</SName>
-          <SMatchBadge>
-            <SMatchText>マッチ度 {matchScore}%</SMatchText>
-          </SMatchBadge>
+          <SBadge>
+            <SBadgeText>マッチ度 {matchScore}%</SBadgeText>
+          </SBadge>
         </STitleContainer>
       </SHeader>
 
       <SDescription>{hobby.description}</SDescription>
 
-      <STagsContainer>
+      <STagsSpaced>
         {matchedTags.map((tag) => (
-          <STag key={tag}>
-            <STagText>#{tag}</STagText>
-          </STag>
+          <STagSecondary key={tag}>
+            <STagSecondaryText>#{tag}</STagSecondaryText>
+          </STagSecondary>
         ))}
-      </STagsContainer>
+      </STagsSpaced>
 
-      <SInfoRow>
+      <SSectionDivider>
         <SInfoItem>
           <SInfoLabel>初期コスト</SInfoLabel>
-          <SInfoValue>{hobby.startCost}</SInfoValue>
+          <SValue>{hobby.startCost}</SValue>
         </SInfoItem>
         <SInfoItem>
           <SInfoLabel>かかる時間</SInfoLabel>
-          <SInfoValue>{hobby.timeCommit}</SInfoValue>
+          <SValue>{hobby.timeCommit}</SValue>
         </SInfoItem>
-      </SInfoRow>
+      </SSectionDivider>
     </SCard>
   );
 }

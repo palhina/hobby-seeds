@@ -17,6 +17,13 @@ import { useHobbyLog } from '@/hooks/use-hobby-log';
 import { LogEntry } from '@/components/features/log/LogEntry';
 import { LogStats } from '@/components/features/log/LogStats';
 import { EmptyLogState } from '@/components/features/log/EmptyLogState';
+import {
+  SScreenContainer,
+  SRow,
+  SDisplayText,
+  SSmallText,
+  SCenteredContent,
+} from '@/components/ui/primitives';
 
 // 趣味データをインポート
 import hobbiesData from '@/data/hobbies.json';
@@ -30,13 +37,8 @@ type SortedEntry = {
 };
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
-
-const SContainer = styled.View`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
 
 const SHeader = styled.View`
   padding: ${({ theme }) => theme.spacing.lg}px;
@@ -44,15 +46,12 @@ const SHeader = styled.View`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-const SHeaderTitle = styled.Text`
+const SHeaderTitle = styled(SDisplayText)`
   font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  text-align: left;
 `;
 
-const SHeaderSubtitle = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+const SHeaderSubtitle = styled(SSmallText)`
   margin-top: ${({ theme }) => theme.spacing.xs}px;
 `;
 
@@ -61,24 +60,15 @@ const SContentContainer = styled.View`
   padding: 0 ${({ theme }) => theme.spacing.lg}px;
 `;
 
-const SLoadingContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-
-const SLoadingText = styled.Text`
+const SLoadingText = styled(SSmallText)`
   font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
-const SStepUpHint = styled.View`
+const SStepUpHint = styled(SRow)`
   background-color: ${({ theme }) => theme.colors.primaryLight};
   padding: ${({ theme }) => theme.spacing.md}px;
   border-radius: ${({ theme }) => theme.borderRadius.md}px;
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
-  flex-direction: row;
-  align-items: center;
 `;
 
 const SStepUpHintEmoji = styled.Text`
@@ -86,9 +76,8 @@ const SStepUpHintEmoji = styled.Text`
   margin-right: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-const SStepUpHintText = styled.Text`
+const SStepUpHintText = styled(SSmallText)`
   flex: 1;
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
   color: ${({ theme }) => theme.colors.textPrimary};
   line-height: ${({ theme }) => theme.typography.fontSize.sm * 1.5}px;
 `;
@@ -204,20 +193,20 @@ export default function LogScreen() {
 
   if (isLoading) {
     return (
-      <SContainer style={{ paddingTop: insets.top + 16 }}>
+      <SScreenContainer style={{ paddingTop: insets.top + 16 }}>
         <SHeader>
           <SHeaderTitle>記録</SHeaderTitle>
           <SHeaderSubtitle>試した趣味の履歴</SHeaderSubtitle>
         </SHeader>
-        <SLoadingContainer>
+        <SCenteredContent>
           <SLoadingText>読み込み中...</SLoadingText>
-        </SLoadingContainer>
-      </SContainer>
+        </SCenteredContent>
+      </SScreenContainer>
     );
   }
 
   return (
-    <SContainer style={{ paddingTop: insets.top + 16 }}>
+    <SScreenContainer style={{ paddingTop: insets.top + 16 }}>
       <SHeader>
         <SHeaderTitle>記録</SHeaderTitle>
         <SHeaderSubtitle>試した趣味の履歴</SHeaderSubtitle>
@@ -236,6 +225,6 @@ export default function LogScreen() {
           />
         )}
       </SContentContainer>
-    </SContainer>
+    </SScreenContainer>
   );
 }

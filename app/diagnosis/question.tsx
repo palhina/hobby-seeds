@@ -14,24 +14,15 @@ import { DiagnosisHeader } from '@/components/features/diagnosis/DiagnosisHeader
 import { ProgressBar } from '@/components/features/diagnosis/ProgressBar';
 import { QuestionText } from '@/components/features/diagnosis/QuestionText';
 import { DiagnosisCard } from '@/components/features/diagnosis/DiagnosisCard';
+import { SSafeContainer, SContent } from '@/components/ui/primitives';
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
-
-const SContainer = styled.SafeAreaView`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
 
 const SHeader = styled.View`
   padding: ${({ theme }) => theme.spacing.lg}px;
   padding-top: 0;
-`;
-
-const SContent = styled.View`
-  flex: 1;
-  padding: ${({ theme }) => theme.spacing.lg}px;
 `;
 
 const SQuestionContainer = styled.View`
@@ -81,7 +72,7 @@ export default function DiagnosisQuestionScreen() {
   };
 
   return (
-    <SContainer>
+    <SSafeContainer>
       <DiagnosisHeader />
       <SHeader>
         <ProgressBar
@@ -107,6 +98,6 @@ export default function DiagnosisQuestionScreen() {
           ))}
         </SOptionsContainer>
       </SContent>
-    </SContainer>
+    </SSafeContainer>
   );
 }

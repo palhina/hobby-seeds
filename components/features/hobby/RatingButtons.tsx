@@ -9,6 +9,8 @@ import React from 'react';
 import styled from 'styled-components/native';
 import * as Haptics from 'expo-haptics';
 
+import { SRow } from '@/components/ui/primitives';
+
 import type { Rating } from '@/types';
 
 // ===================
@@ -37,13 +39,11 @@ const RATING_OPTIONS: RatingOption[] = [
 ];
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
 
-const SContainer = styled.View`
-  flex-direction: row;
+const SContainer = styled(SRow)`
   justify-content: center;
-  align-items: center;
   gap: ${({ theme }) => theme.spacing.md}px;
 `;
 

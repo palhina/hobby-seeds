@@ -8,36 +8,28 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-// ===================
-// Styled Components
-// ===================
+import {
+  SCenteredContent,
+  SDisplayText,
+  SBodyText,
+} from '@/components/ui/primitives';
 
-const SContainer = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.xl}px;
-`;
+// ===================
+// Local Styles
+// ===================
 
 const SEmoji = styled.Text`
   font-size: ${({ theme }) => theme.typography.fontSize.display * 1.5}px;
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
-const STitle = styled.Text`
+const STitle = styled(SDisplayText)`
   font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-const SDescription = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+const SDescription = styled(SBodyText)`
   text-align: center;
-  line-height: ${({ theme }) =>
-    theme.typography.fontSize.md * theme.typography.lineHeight.relaxed}px;
 `;
 
 // ===================
@@ -46,13 +38,13 @@ const SDescription = styled.Text`
 
 export function EmptyLogState() {
   return (
-    <SContainer>
+    <SCenteredContent>
       <SEmoji>📝</SEmoji>
       <STitle>まだ記録がありません</STitle>
       <SDescription>
         ホーム画面から趣味を選んで{'\n'}
         「やってみた」を記録してみましょう
       </SDescription>
-    </SContainer>
+    </SCenteredContent>
   );
 }

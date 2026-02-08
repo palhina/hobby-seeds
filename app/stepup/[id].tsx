@@ -10,6 +10,13 @@ import styled from 'styled-components/native';
 
 import { findStepUpHobbyById } from '@/utils/match-stepup';
 import { StepUpDetail } from '@/components/features/stepup';
+import {
+  SScreenContainer,
+  SCenteredContent,
+  SDisplayText,
+  SBodyText,
+  SEmojiLarge,
+} from '@/components/ui/primitives';
 
 import type { StepUpHobby } from '@/types';
 
@@ -17,37 +24,19 @@ import type { StepUpHobby } from '@/types';
 import stepUpHobbiesData from '@/data/stepup-hobbies.json';
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
 
-const SContainer = styled.View`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
-
-const SErrorContainer = styled.View`
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  padding: ${({ theme }) => theme.spacing.xxl}px;
-`;
-
-const SErrorEmoji = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.display}px;
+const SErrorEmoji = styled(SEmojiLarge)`
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
-const SErrorTitle = styled.Text`
+const SErrorTitle = styled(SDisplayText)`
   font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-const SErrorMessage = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+const SErrorMessage = styled(SBodyText)`
   text-align: center;
 `;
 
@@ -90,31 +79,31 @@ export default function StepUpDetailScreen() {
   // ローディング中
   if (loading) {
     return (
-      <SContainer>
-        <SErrorContainer>
+      <SScreenContainer>
+        <SCenteredContent>
           <SErrorMessage>読み込み中...</SErrorMessage>
-        </SErrorContainer>
-      </SContainer>
+        </SCenteredContent>
+      </SScreenContainer>
     );
   }
 
   // 趣味が見つからない
   if (!hobby) {
     return (
-      <SContainer>
-        <SErrorContainer>
+      <SScreenContainer>
+        <SCenteredContent>
           <SErrorEmoji>🤔</SErrorEmoji>
           <SErrorTitle>趣味が見つかりません</SErrorTitle>
           <SErrorMessage>この趣味は存在しないか、削除されました</SErrorMessage>
-        </SErrorContainer>
-      </SContainer>
+        </SCenteredContent>
+      </SScreenContainer>
     );
   }
 
   // 詳細を表示
   return (
-    <SContainer>
+    <SScreenContainer>
       <StepUpDetail hobby={hobby} />
-    </SContainer>
+    </SScreenContainer>
   );
 }

@@ -11,45 +11,40 @@ import styled from 'styled-components/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import {
+  SScreenContainer,
+  SContent,
+  SRowBetween,
+  STitle,
+  SSmallText,
+  SMutedText,
+} from '@/components/ui/primitives';
 
-const SContainer = styled.View`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
+// ===================
+// Local Styles
+// ===================
 
-const SHeader = styled.View`
+const SHeader = styled(SRowBetween)`
   padding: ${({ theme }) => theme.spacing.xl}px;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
   background-color: ${({ theme }) => theme.colors.surface};
   border-bottom-width: 1px;
   border-bottom-color: ${({ theme }) => theme.colors.border};
 `;
 
-const SHeaderTitle = styled.Text`
+const SHeaderTitle = styled(STitle)`
   font-size: ${({ theme }) => theme.typography.fontSize.xl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
 `;
 
 const SCloseButton = styled.Pressable`
   padding: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-const SContent = styled.View`
-  flex: 1;
-  padding: ${({ theme }) => theme.spacing.xl}px;
-`;
-
 const SSection = styled.View`
   margin-bottom: ${({ theme }) => theme.spacing.xl}px;
 `;
 
-const SSectionTitle = styled.Text`
+const SSectionTitle = styled(STitle)`
   font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
@@ -68,9 +63,7 @@ const SLinkText = styled.Text`
   text-align: center;
 `;
 
-const SDescription = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
+const SDescription = styled(SSmallText)`
   line-height: 20px;
   margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
@@ -80,20 +73,21 @@ const SAppInfo = styled.View`
   margin-top: ${({ theme }) => theme.spacing.xl}px;
 `;
 
-const SAppName = styled.Text`
+const SAppName = styled(STitle)`
   font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
   margin-bottom: ${({ theme }) => theme.spacing.xs}px;
 `;
 
-const SVersion = styled.Text`
+const SVersion = styled(SMutedText)`
   font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  color: ${({ theme }) => theme.colors.textMuted};
 `;
 
 // TODO: GitHub PagesのURLが決まったらここを更新してください
 const PRIVACY_POLICY_URL = 'https://your-github-username.github.io/hobby-seeds/privacy';
+
+// ===================
+// Component
+// ===================
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -124,7 +118,7 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SContainer style={{ paddingTop: insets.top }}>
+    <SScreenContainer style={{ paddingTop: insets.top }}>
       <SHeader>
         <SHeaderTitle>設定</SHeaderTitle>
         <SCloseButton onPress={handleClose}>
@@ -150,10 +144,10 @@ export default function SettingsScreen() {
         </SSection>
 
         <SAppInfo>
-          <SAppName>🌱 ゆる趣味さがし</SAppName>
+          <SAppName>🌱 趣味のたね</SAppName>
           <SVersion>Version 1.0.0</SVersion>
         </SAppInfo>
       </SContent>
-    </SContainer>
+    </SScreenContainer>
   );
 }

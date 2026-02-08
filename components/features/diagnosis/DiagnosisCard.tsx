@@ -4,6 +4,8 @@
 
 import styled from 'styled-components/native';
 
+import { SCardBordered, SLabel, SEmojiMedium } from '@/components/ui/primitives';
+
 // ===================
 // Types
 // ===================
@@ -15,27 +17,18 @@ type DiagnosisCardProps = {
 };
 
 // ===================
-// Styled Components
+// Local Styles
 // ===================
 
-const SCard = styled.TouchableOpacity`
+const SCard = styled(SCardBordered)`
   flex-direction: row;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.surface};
-  padding: ${({ theme }) => theme.spacing.lg}px;
-  border-radius: ${({ theme }) => theme.borderRadius.lg}px;
-  border: 2px solid ${({ theme }) => theme.colors.border};
 `;
 
-const SEmoji = styled.Text`
+const SEmojiSpaced = styled(SEmojiMedium)`
   font-size: 32px;
   margin-right: ${({ theme }) => theme.spacing.md}px;
-`;
-
-const SLabel = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.textPrimary};
+  text-align: left;
 `;
 
 // ===================
@@ -45,7 +38,7 @@ const SLabel = styled.Text`
 export function DiagnosisCard({ emoji, label, onPress }: DiagnosisCardProps) {
   return (
     <SCard onPress={onPress} activeOpacity={0.7}>
-      <SEmoji>{emoji}</SEmoji>
+      <SEmojiSpaced>{emoji}</SEmojiSpaced>
       <SLabel>{label}</SLabel>
     </SCard>
   );

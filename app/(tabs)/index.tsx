@@ -4,91 +4,39 @@ import styled from 'styled-components/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { IconSymbol } from '@/components/ui/icon-symbol';
+import {
+  SScreenContainer,
+  SCenteredContent,
+  SFooter,
+  SAbsoluteHeader,
+  SIconButton,
+  SPrimaryButtonLarge,
+  SPrimaryButtonLargeText,
+  SDisplayText,
+  SSubtitle,
+  SMutedText,
+  SEmojiLarge,
+} from '@/components/ui/primitives';
 
-const SContainer = styled.View`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
+// ===================
+// Local Styles
+// ===================
 
-const SHeader = styled.View`
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  padding: ${({ theme }) => theme.spacing.md}px;
-`;
-
-const SSettingsButton = styled.Pressable`
-  background-color: ${({ theme }) => theme.colors.surface};
-  width: 44px;
-  height: 44px;
-  border-radius: ${({ theme }) => theme.borderRadius.full}px;
-  align-items: center;
-  justify-content: center;
-  shadow-color: ${({ theme }) => theme.colors.shadow};
-  shadow-offset: 0px 2px;
-  shadow-opacity: 0.1;
-  shadow-radius: 4px;
-  elevation: 2;
-`;
-
-const SContent = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.xl}px;
-`;
-
-const SEmoji = styled.Text`
-  font-size: 80px;
+const SEmojiSpaced = styled(SEmojiLarge)`
   margin-bottom: ${({ theme }) => theme.spacing.xl}px;
 `;
 
-const STitle = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.xxl}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  text-align: center;
+const STitleSpaced = styled(SDisplayText)`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-const SSubtitle = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.md}px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  text-align: center;
-  line-height: 24px;
+const SSubtitleSpaced = styled(SSubtitle)`
   margin-bottom: ${({ theme }) => theme.spacing.xxl}px;
 `;
 
-const SStartButton = styled.Pressable`
-  background-color: ${({ theme }) => theme.colors.primary};
-  padding-horizontal: ${({ theme }) => theme.spacing.xxl}px;
-  padding-vertical: ${({ theme }) => theme.spacing.lg}px;
-  border-radius: ${({ theme }) => theme.borderRadius.full}px;
-  shadow-color: ${({ theme }) => theme.colors.primary};
-  shadow-offset: 0px 4px;
-  shadow-opacity: 0.3;
-  shadow-radius: 8px;
-  elevation: 4;
-`;
-
-const SButtonText = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.lg}px;
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.surface};
-  text-align: center;
-`;
-
-const SFooter = styled.View`
-  padding: ${({ theme }) => theme.spacing.xl}px;
-  align-items: center;
-`;
-
-const SFooterText = styled.Text`
-  font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
-  color: ${({ theme }) => theme.colors.textMuted};
-  text-align: center;
-`;
+// ===================
+// Component
+// ===================
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -103,29 +51,29 @@ export default function HomeScreen() {
   };
 
   return (
-    <SContainer style={{ paddingTop: insets.top }}>
-      <SHeader style={{ paddingTop: insets.top }}>
-        <SSettingsButton onPress={handleOpenSettings}>
+    <SScreenContainer style={{ paddingTop: insets.top }}>
+      <SAbsoluteHeader style={{ paddingTop: insets.top }}>
+        <SIconButton onPress={handleOpenSettings}>
           <IconSymbol name="gearshape.fill" size={24} color="#4A3728" />
-        </SSettingsButton>
-      </SHeader>
-      <SContent>
-        <SEmoji>🌱</SEmoji>
-        <STitle>ゆる趣味さがし</STitle>
-        <SSubtitle>
+        </SIconButton>
+      </SAbsoluteHeader>
+      <SCenteredContent>
+        <SEmojiSpaced>🌱</SEmojiSpaced>
+        <STitleSpaced>趣味のたね</STitleSpaced>
+        <SSubtitleSpaced>
           「何かしなきゃ」を{'\n'}
           「ちょっと試してみた」に変える
-        </SSubtitle>
-        <SStartButton onPress={handleStartDiagnosis}>
-          <SButtonText>今日の気分を診断する</SButtonText>
-        </SStartButton>
-      </SContent>
+        </SSubtitleSpaced>
+        <SPrimaryButtonLarge onPress={handleStartDiagnosis}>
+          <SPrimaryButtonLargeText>今日の気分を診断する</SPrimaryButtonLargeText>
+        </SPrimaryButtonLarge>
+      </SCenteredContent>
       <SFooter style={{ paddingBottom: insets.bottom + 16 }}>
-        <SFooterText>
+        <SMutedText style={{ textAlign: 'center' }}>
           続かなくても大丈夫。{'\n'}
           試すことに意味がある
-        </SFooterText>
+        </SMutedText>
       </SFooter>
-    </SContainer>
+    </SScreenContainer>
   );
 }
