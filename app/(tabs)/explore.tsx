@@ -4,9 +4,9 @@
  * 趣味をカテゴリ別・タグ別で探せる画面
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { FlatList, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import styled from 'styled-components/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -111,6 +111,20 @@ export default function ExploreScreen() {
   const insets = useSafeAreaInsets();
   const [selectedCategory, setSelectedCategory] = useState<Category | 'all'>('all');
 
+  // 初回訪問フラグとFlatListのref
+  const isFirstVisit = useRef(true);
+  const flatListRef = useRef<FlatList>(null);
+
+  // 初回訪問時のみスクロール位置をリセット
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isFirstVisit.current) {
+        flatListRef.current?.scrollToOffset({ offset: 0, animated: false });
+        isFirstVisit.current = false;
+      }
+    }, [])
+  );
+
   // カテゴリでフィルタリング
   const filteredHobbies = useMemo(() => {
     const hobbies = hobbiesData as YuruHobby[];
@@ -163,6 +177,8 @@ export default function ExploreScreen() {
 
         {filteredHobbies.length > 0 ? (
           <FlatList
+            ref={flatListRef}
+            key={selectedCategory}
             data={filteredHobbies}
             renderItem={renderHobbyItem}
             keyExtractor={(item) => item.id.toString()}

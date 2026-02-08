@@ -50,31 +50,31 @@ export default function StepUpDetailScreen() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const loadHobby = () => {
+      try {
+        const hobbyId = parseInt(id, 10);
+
+        if (isNaN(hobbyId)) {
+          setLoading(false);
+          return;
+        }
+
+        const stepUpHobbies = stepUpHobbiesData as StepUpHobby[];
+        const foundHobby = findStepUpHobbyById(stepUpHobbies, hobbyId);
+
+        setHobby(foundHobby || null);
+      } catch (error) {
+        if (__DEV__) {
+          console.error('Failed to load hobby:', error);
+        }
+        setHobby(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadHobby();
   }, [id]);
-
-  const loadHobby = () => {
-    try {
-      const hobbyId = parseInt(id, 10);
-
-      if (isNaN(hobbyId)) {
-        setLoading(false);
-        return;
-      }
-
-      const stepUpHobbies = stepUpHobbiesData as StepUpHobby[];
-      const foundHobby = findStepUpHobbyById(stepUpHobbies, hobbyId);
-
-      setHobby(foundHobby || null);
-    } catch (error) {
-      if (__DEV__) {
-        console.error('Failed to load hobby:', error);
-      }
-      setHobby(null);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // ローディング中
   if (loading) {

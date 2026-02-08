@@ -9,7 +9,7 @@ import {
   findStepUpHobbyById,
   STEPUP_UNLOCK_THRESHOLD,
 } from '../match-stepup';
-import { mockStepUpHobbies } from '@/__mocks__/hobbies';
+import { mockStepUpHobbies } from '@/__mocks__/stepup-hobbies';
 import type { Tag } from '@/types';
 
 describe('isStepUpUnlocked', () => {

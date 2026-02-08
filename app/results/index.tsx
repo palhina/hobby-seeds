@@ -7,7 +7,7 @@
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { FlatList } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 import * as Haptics from 'expo-haptics';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -40,7 +40,6 @@ const SHeaderText = styled.Text`
 `;
 
 const SContent = styled.View`
-  flex: 1;
   padding-horizontal: ${({ theme }) => theme.spacing.lg}px;
 `;
 
@@ -227,42 +226,49 @@ export default function ResultsScreen() {
         <SHeaderText>🌱 今日のおすすめ</SHeaderText>
       </SHeader>
 
-      <SContent>
-        <SGridContainer>
-          <SColumnWrapper>
-            <FlatList
-              data={leftColumnData}
-              renderItem={({ item }) => (
-                <HobbyCard hobby={item} onPress={handleHobbyPress} />
-              )}
-              keyExtractor={(item) => `left-${item.id}`}
-              showsVerticalScrollIndicator={false}
-            />
-          </SColumnWrapper>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
+      >
+        <SContent>
+          <SGridContainer>
+            <SColumnWrapper>
+              <FlatList
+                data={leftColumnData}
+                renderItem={({ item }) => (
+                  <HobbyCard hobby={item} onPress={handleHobbyPress} />
+                )}
+                keyExtractor={(item) => `left-${item.id}`}
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={false}
+              />
+            </SColumnWrapper>
 
-          <SColumnWrapper>
-            <FlatList
-              data={rightColumnData}
-              renderItem={({ item }) => (
-                <HobbyCard hobby={item} onPress={handleHobbyPress} />
-              )}
-              keyExtractor={(item) => `right-${item.id}`}
-              showsVerticalScrollIndicator={false}
-            />
-          </SColumnWrapper>
-        </SGridContainer>
-      </SContent>
+            <SColumnWrapper>
+              <FlatList
+                data={rightColumnData}
+                renderItem={({ item }) => (
+                  <HobbyCard hobby={item} onPress={handleHobbyPress} />
+                )}
+                keyExtractor={(item) => `right-${item.id}`}
+                showsVerticalScrollIndicator={false}
+                scrollEnabled={false}
+              />
+            </SColumnWrapper>
+          </SGridContainer>
+        </SContent>
 
-      <SFooter>
-        {showMoreButton && (
-          <SSecondaryButton onPress={handleShowMore} activeOpacity={0.8}>
-            <SSecondaryButtonText>🔄 他にもみる</SSecondaryButtonText>
-          </SSecondaryButton>
-        )}
-        <SPrimaryButton onPress={handleBackToDiagnosis} activeOpacity={0.8}>
-          <SPrimaryButtonText>もう一度診断する</SPrimaryButtonText>
-        </SPrimaryButton>
-      </SFooter>
+        <SFooter>
+          {showMoreButton && (
+            <SSecondaryButton onPress={handleShowMore} activeOpacity={0.8}>
+              <SSecondaryButtonText>🔄 他にもみる</SSecondaryButtonText>
+            </SSecondaryButton>
+          )}
+          <SPrimaryButton onPress={handleBackToDiagnosis} activeOpacity={0.8}>
+            <SPrimaryButtonText>もう一度診断する</SPrimaryButtonText>
+          </SPrimaryButton>
+        </SFooter>
+      </ScrollView>
     </SContainer>
   );
 }

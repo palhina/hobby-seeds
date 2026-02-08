@@ -13,7 +13,8 @@ import {
   matchStepUpHobbies,
 } from '@/utils/match-stepup';
 import { analyzeUserTags } from '@/utils/analyze-tags';
-import { mockHobbies, mockHobbyById, mockStepUpHobbies } from '@/__mocks__/hobbies';
+import { mockHobbies, mockHobbyById } from '@/__mocks__/hobbies';
+import { mockStepUpHobbies } from '@/__mocks__/stepup-hobbies';
 
 import type { HobbyLogEntry, Rating } from '@/types';
 

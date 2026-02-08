@@ -10,7 +10,6 @@ import styled from 'styled-components/native';
 import {
   SCardPressable,
   SRow,
-  SRowBetween,
   SSectionDivider,
   STitle,
   SBodyText,

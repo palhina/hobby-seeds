@@ -216,7 +216,7 @@ describe('LogEntry', () => {
   });
 
   describe('複数の評価パターン', () => {
-    const ratings: Array<{ rating: Rating; emoji: string }> = [
+    const ratings: { rating: Rating; emoji: string }[] = [
       { rating: 'meh', emoji: '😐' },
       { rating: 'good', emoji: '🙂' },
       { rating: 'great', emoji: '😊' },

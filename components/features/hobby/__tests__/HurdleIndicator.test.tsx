@@ -9,8 +9,6 @@ import React from 'react';
 import { HurdleIndicator } from '../HurdleIndicator';
 import { renderWithTheme } from '../../__tests__/test-helpers';
 
-import type { Location } from '@/types';
-
 describe('HurdleIndicator', () => {
   describe('時間表示', () => {
     it('時間が正しく表示される（5分）', () => {

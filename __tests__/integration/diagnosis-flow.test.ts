@@ -14,28 +14,28 @@ import {
 } from '@/utils/filter-hobbies';
 import { mockHobbies } from '@/__mocks__/hobbies';
 
-import type { DiagnosisAnswers, YuruHobby } from '@/types';
+import type { DiagnosisAnswer, YuruHobby } from '@/types';
 
 describe('診断フロー統合テスト', () => {
   describe('完全なフローのテスト', () => {
     it('疲れている時の回答で、低エネルギー・屋内趣味が提案される', () => {
       // ユーザーの回答を模擬
-      const answers: DiagnosisAnswers = {
+      const answers: DiagnosisAnswer = {
         energy: 'low',
-        environment: 'indoor',
-        time: 15,
+        goOut: false,
+        activityType: 'passive',
       };
 
       // Step 1: フィルタリング
       const filteredHobbies = filterHobbiesByDiagnosis(mockHobbies, answers);
 
-      // Step 2: 検証 - 低エネルギーまたは屋内の趣味が含まれる
+      // Step 2: 検証 - 低エネルギー・屋内・パッシブの趣味が含まれる
       expect(filteredHobbies.length).toBeGreaterThan(0);
       filteredHobbies.forEach((hobby) => {
-        // 低エネルギーまたは屋内のいずれかを満たす
-        const matchesEnergy = hobby.energy === 'low';
-        const matchesIndoor = hobby.indoor === true;
-        expect(matchesEnergy || matchesIndoor).toBe(true);
+        // 低エネルギー
+        expect(hobby.energy).toBe('low');
+        // 屋内（goOut: falseなので屋外専用は除外）
+        expect(hobby.indoor).toBe(true);
       });
 
       // Step 3: ランダム選択（最大3件）
@@ -44,28 +44,27 @@ describe('診断フロー統合テスト', () => {
       expect(selectedHobbies.length).toBeGreaterThan(0);
     });
 
-    it('元気な時の回答で、高エネルギー・屋外趣味が提案される', () => {
-      const answers: DiagnosisAnswers = {
+    it('元気な時の回答で、高エネルギー・アクティブ趣味が提案される', () => {
+      const answers: DiagnosisAnswer = {
         energy: 'high',
-        environment: 'outdoor',
-        time: 60,
+        goOut: true,
+        activityType: 'active',
       };
 
       const filteredHobbies = filterHobbiesByDiagnosis(mockHobbies, answers);
 
       expect(filteredHobbies.length).toBeGreaterThan(0);
       filteredHobbies.forEach((hobby) => {
-        const matchesEnergy = hobby.energy === 'high' || hobby.energy === 'medium';
-        const matchesOutdoor = hobby.indoor === false;
-        expect(matchesEnergy || matchesOutdoor).toBe(true);
+        // 高エネルギー
+        expect(['high', 'medium']).toContain(hobby.energy);
       });
     });
 
-    it('どこでもOK（both）の回答で、優先度付き選択が機能する', () => {
-      const answers: DiagnosisAnswers = {
+    it('外出OKの回答で、優先度付き選択が機能する', () => {
+      const answers: DiagnosisAnswer = {
         energy: 'medium',
-        environment: 'both',
-        time: 30,
+        goOut: true,
+        activityType: 'passive',
       };
 
       const filteredHobbies = filterHobbiesByDiagnosis(mockHobbies, answers);
@@ -81,10 +80,10 @@ describe('診断フロー統合テスト', () => {
   describe('フィルタ → 選択 → 表示の連携', () => {
     it('フィルタ結果が0件の場合でも、フォールバックで趣味を提案できる', () => {
       // 非常に厳しい条件
-      const answers: DiagnosisAnswers = {
+      const answers: DiagnosisAnswer = {
         energy: 'high',
-        environment: 'indoor',
-        time: 5, // 5分以内
+        goOut: false,
+        activityType: 'active',
       };
 
       const filteredHobbies = filterHobbiesByDiagnosis(mockHobbies, answers);
@@ -101,10 +100,10 @@ describe('診断フロー統合テスト', () => {
     });
 
     it('複数回の診断でも一貫したフィルタリング結果が得られる', () => {
-      const answers: DiagnosisAnswers = {
+      const answers: DiagnosisAnswer = {
         energy: 'low',
-        environment: 'indoor',
-        time: 30,
+        goOut: false,
+        activityType: 'passive',
       };
 
       // 同じ条件で2回フィルタリング
@@ -119,10 +118,10 @@ describe('診断フロー統合テスト', () => {
 
   describe('エッジケースのテスト', () => {
     it('空の趣味リストでも例外が発生しない', () => {
-      const answers: DiagnosisAnswers = {
+      const answers: DiagnosisAnswer = {
         energy: 'low',
-        environment: 'indoor',
-        time: 15,
+        goOut: false,
+        activityType: 'passive',
       };
 
       const emptyHobbies: YuruHobby[] = [];
@@ -133,10 +132,10 @@ describe('診断フロー統合テスト', () => {
     });
 
     it('時間が非常に短い場合でもフィルタリングが動作する', () => {
-      const answers: DiagnosisAnswers = {
+      const answers: DiagnosisAnswer = {
         energy: 'low',
-        environment: 'indoor',
-        time: 1, // 1分
+        goOut: false,
+        activityType: 'passive',
       };
 
       expect(() => {
@@ -149,10 +148,10 @@ describe('診断フロー統合テスト', () => {
   describe('ユーザーシナリオのテスト', () => {
     it('シナリオ: 仕事終わりで疲れている → リラックスできる趣味を提案', () => {
       // ユーザー状況: 仕事終わりで疲れている、家にいる、30分ある
-      const answers: DiagnosisAnswers = {
+      const answers: DiagnosisAnswer = {
         energy: 'low',
-        environment: 'indoor',
-        time: 30,
+        goOut: false,
+        activityType: 'passive',
       };
 
       const filtered = filterHobbiesByDiagnosis(mockHobbies, answers);
@@ -170,10 +169,10 @@ describe('診断フロー統合テスト', () => {
     });
 
     it('シナリオ: 休日の朝で元気 → アクティブな趣味を提案', () => {
-      const answers: DiagnosisAnswers = {
+      const answers: DiagnosisAnswer = {
         energy: 'high',
-        environment: 'outdoor',
-        time: 60,
+        goOut: true,
+        activityType: 'active',
       };
 
       const filtered = filterHobbiesByDiagnosis(mockHobbies, answers);
@@ -183,21 +182,16 @@ describe('診断フロー統合テスト', () => {
     });
 
     it('シナリオ: 普通の気分で短時間 → 手軽な趣味を提案', () => {
-      const answers: DiagnosisAnswers = {
+      const answers: DiagnosisAnswer = {
         energy: 'medium',
-        environment: 'both',
-        time: 15,
+        goOut: true,
+        activityType: 'passive',
       };
 
       const filtered = filterHobbiesByDiagnosis(mockHobbies, answers);
       const selected = selectRandomHobbies(filtered, 3);
 
       expect(selected.length).toBeGreaterThan(0);
-
-      // 選択された趣味は時間条件を満たす
-      selected.forEach((hobby) => {
-        expect(hobby.time).toBeLessThanOrEqual(30); // 15分 + バッファ
-      });
     });
   });
 });

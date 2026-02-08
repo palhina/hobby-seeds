@@ -329,7 +329,8 @@ describe('useAsyncStorage', () => {
       const firstSetItem = result.current.setItem;
       const firstRemoveItem = result.current.removeItem;
 
-      rerender();
+      // 再レンダリングをトリガー（propsが変わらない場合）
+      rerender({});
 
       expect(result.current.getItem).toBe(firstGetItem);
       expect(result.current.setItem).toBe(firstSetItem);

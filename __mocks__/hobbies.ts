@@ -4,7 +4,7 @@
  * テスト用のモックデータ。各エネルギーレベル・indoor/outdoorをカバー
  */
 
-import type { YuruHobby, StepUpHobby } from "@/types";
+import type { YuruHobby } from "@/types";
 
 export const mockHobbies: YuruHobby[] = [
   {
@@ -159,62 +159,4 @@ export const mockHobbiesByLocation = (
 
 export const mockHobbiesByIndoor = (indoor: boolean): YuruHobby[] => {
   return mockHobbies.filter((hobby) => hobby.indoor === indoor);
-};
-
-/**
- * StepUpHobbyのモックデータ
- */
-export const mockStepUpHobbies: StepUpHobby[] = [
-  {
-    id: 101,
-    name: "デジタルイラスト",
-    emoji: "🎨",
-    tags: ["クリエイティブ", "アート"],
-    matchTags: ["クリエイティブ", "アート"],
-    description: "タブレットやPCで絵を描く趣味。無料アプリも充実",
-    startCost: "0円〜",
-    startGuide: "まずは無料アプリ「ibisPaint」から",
-    timeCommit: "週2〜3時間",
-    nextSteps: ["ibisPaintをダウンロード", "YouTubeで検索", "好きな絵師をフォロー"],
-  },
-  {
-    id: 102,
-    name: "ヨガ",
-    emoji: "🧘‍♀️",
-    tags: ["フィジカル", "リラックス", "健康"],
-    matchTags: ["フィジカル", "リラックス", "健康"],
-    description: "心と体を整える、自分のペースでできる運動",
-    startCost: "0円〜",
-    startGuide: "YouTubeの「朝ヨガ10分」から",
-    timeCommit: "週2〜3回",
-    nextSteps: ["YouTubeを見る", "ヨガマット購入", "スタジオ体験"],
-  },
-  {
-    id: 103,
-    name: "ランニング",
-    emoji: "🏃",
-    tags: ["フィジカル", "健康", "散歩"],
-    matchTags: ["フィジカル", "健康", "散歩"],
-    description: "散歩の延長から始める運動習慣",
-    startCost: "5,000円〜",
-    startGuide: "最初は歩き混じりでOK",
-    timeCommit: "週2〜3回",
-    nextSteps: ["シューズ購入", "アプリ導入", "コース決め"],
-  },
-  {
-    id: 104,
-    name: "読書習慣",
-    emoji: "📖",
-    tags: ["学び", "知識", "読む"],
-    matchTags: ["学び", "知識", "読む"],
-    description: "月1冊から始める知識の世界",
-    startCost: "0円〜",
-    startGuide: "図書館活用で気軽に",
-    timeCommit: "1日10分〜",
-    nextSteps: ["図書館カード作成", "読書メーター登録", "1冊借りる"],
-  },
-];
-
-export const mockStepUpHobbyById = (id: number): StepUpHobby | undefined => {
-  return mockStepUpHobbies.find((hobby) => hobby.id === id);
 };
