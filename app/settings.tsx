@@ -82,8 +82,7 @@ const SVersion = styled(SMutedText)`
   font-size: ${({ theme }) => theme.typography.fontSize.sm}px;
 `;
 
-// TODO: GitHub PagesのURLが決まったらここを更新してください
-const PRIVACY_POLICY_URL = 'https://your-github-username.github.io/hobby-seeds/privacy';
+const PRIVACY_POLICY_URL = 'https://mopsworks.jp/privacy.html';
 
 // ===================
 // Component

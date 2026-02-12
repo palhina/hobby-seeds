@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import styled from 'styled-components/native';
 
 import { IconSymbol } from '@/components/ui/icon-symbol';
@@ -118,6 +118,15 @@ type LogEntryProps = {
 
 export function LogEntry({ entry, hobbyName, hobbyEmoji, onDelete }: LogEntryProps) {
   const handleDeletePress = () => {
+    if (Platform.OS === 'web') {
+      // Web環境ではAlert.alertが使えないためwindow.confirmを使用
+      const confirmed = window.confirm(`「${hobbyName}」の記録を削除しますか？`);
+      if (confirmed) {
+        onDelete?.();
+      }
+      return;
+    }
+
     Alert.alert(
       '記録を削除',
       `「${hobbyName}」の記録を削除しますか？`,
